@@ -1,21 +1,32 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next",
+    "dev": "next -p 4000",
     "build": "next build",
     "start": "next start",
     "type-check": "tsc"
   },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  },
   "dependencies": {
     "@heroicons/react": "^1.0.6",
     "autoprefixer": "^10.4.5",
+    "axios": "^0.27.0",
+    "dotenv": "^16.0.0",
+    "formik": "^2.2.9",
     "heroicons": "^1.0.6",
     "next": "latest",
     "postcss": "^8.4.12",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.3.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@babel/core": "7.16.12",
     "@types/node": "^12.12.21",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",

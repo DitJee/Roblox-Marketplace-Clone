@@ -23,7 +23,7 @@ class Server {
 
   private config() {
     const corsOption: CorsOption = {
-      origin: "http://localhost:8081",
+      origin: "http://localhost:4000",
     };
 
     this.app.use(express.json());
