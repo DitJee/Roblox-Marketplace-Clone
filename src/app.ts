@@ -6,11 +6,10 @@ const starter = new server();
 
 (async function main() {
   try {
+    await starter.dbSync();
     const port = await starter.start(PORT);
     console.log(`Running on port ${port}`);
   } catch (err) {
     console.log(err);
   }
 })();
-
-export default starter;

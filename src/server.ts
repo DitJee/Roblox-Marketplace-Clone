@@ -8,6 +8,9 @@ import { CorsOption } from "./interfaces";
 import DB from "./models";
 import authenticationRouter from "./routers/auth.routes";
 import authorizationRouter from "./routers/user.routes";
+import gameRouter from "./routers/games/games.router";
+import "dotenv/config";
+import e from "express";
 
 class Server {
   private app;
@@ -18,7 +21,6 @@ class Server {
     this.config();
     this.routerConfig();
     this.dbConnect();
-    this.dbSync();
   }
 
   private config() {
@@ -51,6 +53,8 @@ class Server {
     this.app.use("/api", authenticationRouter);
 
     this.app.use("/api", authorizationRouter);
+
+    this.app.use("/api", gameRouter);
   }
 
   private dbConnect() {
@@ -60,38 +64,40 @@ class Server {
     });
   }
 
-  private async dbSync() {
+  public dbSync = async () => {
     const db = new DB();
     this.Role = db.role.role;
+    // db.sequelize.sync({ force: true })
 
-    try {
-      await db.sequelize.sync({ force: false });
-      console.log("Drop and Resync Db");
-      this.initial();
-    } catch (err) {
-      throw new Error(err);
+    if (process.env.NODE_ENV === "Development") {
+      await db.sequelize.sync();
+      console.log("Does not drop or sync database");
+    } else {
+      await db.sequelize.sync({ force: true });
+      console.log("Drop and Resync Database with { force: true }");
+      this.initialize();
     }
-  }
-  private initial() {
+  };
+  public initialize = async () => {
     try {
-      this.Role.create({
+      await this.Role.create({
         id: 1,
         name: "user",
       });
 
-      this.Role.create({
+      await this.Role.create({
         id: 2,
         name: "moderator",
       });
 
-      this.Role.create({
+      await this.Role.create({
         id: 3,
         name: "admin",
       });
-    } catch (err) {
-      throw new Error(err);
+    } catch (error) {
+      console.log(error);
     }
-  }
+  };
 
   public start = (port: number) => {
     return new Promise((resolve, reject) => {

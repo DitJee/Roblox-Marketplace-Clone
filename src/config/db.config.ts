@@ -1,4 +1,5 @@
 import { Dialect } from "sequelize/types";
+import "dotenv/config";
 
 const user: string = process.env.DB_USER;
 const password: string = process.env.DB_PASSWORD;

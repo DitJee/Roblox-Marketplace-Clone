@@ -35,14 +35,12 @@ class Authentication {
           },
         });
 
-        user.setRoles(roles).then(() => {
-          res.send({ message: "User was registered successfully!" });
-        });
+        await user.setRoles(roles);
+        res.send({ message: "User was registered successfully!" });
       } else {
         // Set to default role
-        user.setRoles([1]).then(() => {
-          res.send({ message: "User was registered successfully!" });
-        });
+        await user.setRoles([1]);
+        res.send({ message: "User was registered successfully!" });
       }
     } catch (err) {
       res.status(500).send({ message: err.message });

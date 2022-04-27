@@ -1,11 +1,15 @@
 import pool from "../../dbconfig/dbconnector";
 
 class TestController {
-  public async get(req, res) {
+  public TABLE_NAME: string = "todos";
+  public ALL_COLUMNS_NAME: string;
+
+  public get = async (req, res) => {
+    console.log(this.TABLE_NAME);
     try {
       const client = await pool.connect();
 
-      const sql = "SELECT * FROM todos";
+      const sql = `SELECT * FROM ${this.TABLE_NAME}`;
       const { rows } = await client.query(sql);
 
       const todos = rows;
@@ -17,7 +21,7 @@ class TestController {
       console.log(error);
       res.status(400).send(error);
     }
-  }
+  };
 }
 
 export default TestController;
