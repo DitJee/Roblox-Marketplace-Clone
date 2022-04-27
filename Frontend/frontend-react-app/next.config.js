@@ -1,6 +1,6 @@
 module.exports = {
   images: {
-      domains: ["links.papareact.com"]
+      domains: ["links.papareact.com", "img.icons8.com","picsum.photos"]
   },
   future: {
     webpack5: true, // by default, if you customize webpack config, they switch back to version 4. 

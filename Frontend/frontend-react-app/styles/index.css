@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.navbar {
+    @apply  sticky top-0 z-50 grid grid-cols-2 items-center   bg-gray-300 shadow-md p-5 md:px-10;
+  }
+  
+  .logo {
+    @apply text-5xl text-gray-800 -mb-1;
+  }
+  
+  .navItems {
+    @apply flex flex-row self-end h-12;
+  }
+  
+  .navItem {
+    @apply w-20 text-gray-400 hover:text-gray-700 cursor-pointer font-medium tracking-wide text-sm flex items-start justify-center;
+  }
+  
+  .selectedNavItem {
+    @apply text-gray-700 border-b-2 border-gray-700 bg-gradient-to-b from-white to-gray-100;
+  }
+  
+  .actions {
+    @apply bg-white hover:bg-gray-50 border-2 border-gray-900 text-sm text-gray-900 py-3 px-5 rounded-lg font-medium tracking-wide leading-none;
+  }

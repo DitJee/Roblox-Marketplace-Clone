@@ -41,7 +41,7 @@ const Login = (props) => {
 
     try {
       await AuthService.login(username, password);
-      navigate('/');
+      navigate('/home');
       //window.location.reload();
     } catch (error) {
       const resMessage: string =

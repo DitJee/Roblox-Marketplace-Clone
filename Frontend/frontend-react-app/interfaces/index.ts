@@ -13,3 +13,16 @@ export type PORTs = {
   Node: string;
   React: string;
 };
+
+export type GameInfo = {
+  thumbnail: string;
+  name: string;
+  likePercentage: number;
+  viewCount: number;
+  category: number;
+};
+
+export type CategoryInfo = {
+  id: number;
+  category: string;
+};

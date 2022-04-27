@@ -15,6 +15,7 @@ import Header from '../components/PreLogin/Header';
 import SignupForm from '../components/PreLogin/SignupForm';
 import Login from '../components/PreLogin/Login';
 import Register from '../components/PreLogin/Register';
+import Home from '../components/PostLogin/Home';
 
 export async function getStaticProps() {
   const exploreData = await fetch('https://links.papareact.com/pyp').then(
@@ -35,12 +36,13 @@ export default function StartingPage(props) {
     <Router>
       <div className="4er">
         <Head>
-          <title>Jee's App</title>
+          <title>ROBLOCK</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <Routes>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
+          <Route path="/home" element={<Home />}></Route>
           <Route path="" element={<Navigate to="/login" />} />
         </Routes>
       </div>

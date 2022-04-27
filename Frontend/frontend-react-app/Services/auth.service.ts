@@ -9,7 +9,7 @@ const AUTH_URL: string = '/api/auth';
 class AuthService {
   private API_URL: string = API_PREFIX + AUTH_URL;
 
-  public async login(username: string, password: string) {
+  public login = async (username: string, password: string) => {
     const url: string = this.API_URL + '/signin';
     try {
       const response = await axios.post(url, {
@@ -25,25 +25,29 @@ class AuthService {
     } catch (err) {
       throw new Error(err);
     }
-  }
+  };
 
-  public logout(): void {
+  public logout = (): void => {
     localStorage.removeItem('user');
-  }
+  };
 
-  public async register(username: string, email: string, password: string) {
+  public register = async (
+    username: string,
+    email: string,
+    password: string
+  ) => {
     const url: string = this.API_URL + '/signup';
     const response = await axios.post(url, {
       username,
       email,
       password,
     });
-  }
+  };
 
-  public getCurrentUser() {
+  public getCurrentUser = () => {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
-  }
+  };
 }
 
 export default new AuthService();
