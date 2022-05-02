@@ -1,5 +1,19 @@
 [
   {
+    "thumbnail": "https://picsum.photos/id/1/200/300",
+    "name": "Game_1",
+    "likePercentage": 15,
+    "viewCount": 1546,
+    "category": 5
+  },
+  {
+    "thumbnail": "https://picsum.photos/id/2/200/300",
+    "name": "Game_2",
+    "likePercentage": 44,
+    "viewCount": 100,
+    "category": 1
+  },
+  {
     "thumbnail": "https://picsum.photos/id/3/200/300",
     "name": "Game_3",
     "likePercentage": 4,

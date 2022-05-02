@@ -2,7 +2,6 @@ import express, { Application, Router } from "express";
 import bodyParser from "body-parser";
 import testRouter from "./routers/test/testRouter";
 import router from "./routers/index";
-import pool from "./dbconfig/dbconnector";
 import cors from "cors";
 import { CorsOption } from "./interfaces";
 import DB from "./models";
@@ -14,13 +13,13 @@ import e from "express";
 
 class Server {
   private app;
-  private Role;
+  private role;
+  private gameCategory;
 
   constructor() {
     this.app = express();
     this.config();
     this.routerConfig();
-    this.dbConnect();
   }
 
   private config() {
@@ -57,16 +56,10 @@ class Server {
     this.app.use("/api", gameRouter);
   }
 
-  private dbConnect() {
-    pool.connect((err, client, done) => {
-      if (err) throw new Error(err);
-      console.log("Connected");
-    });
-  }
-
   public dbSync = async () => {
     const db = new DB();
-    this.Role = db.role.role;
+    this.role = db.role.role;
+    this.gameCategory = db.gameCategory.gameCategory;
     // db.sequelize.sync({ force: true })
 
     if (process.env.NODE_ENV === "Development") {
@@ -75,25 +68,64 @@ class Server {
     } else {
       await db.sequelize.sync({ force: true });
       console.log("Drop and Resync Database with { force: true }");
-      this.initialize();
     }
+    this.initialize();
   };
   public initialize = async () => {
     try {
-      await this.Role.create({
-        id: 1,
-        name: "user",
-      });
+      Promise.all(
+        [
+          {
+            id: 1,
+            name: "user",
+          },
+          {
+            id: 2,
+            name: "moderator",
+          },
+          {
+            id: 3,
+            name: "admin",
+          },
+        ].map(async (role) => {
+          await this.role.create(role);
+        })
+      );
 
-      await this.Role.create({
-        id: 2,
-        name: "moderator",
-      });
-
-      await this.Role.create({
-        id: 3,
-        name: "admin",
-      });
+      Promise.all(
+        [
+          {
+            id: 1,
+            category: "Fighting & Battle",
+          },
+          {
+            id: 2,
+            category: "Role-Playing",
+          },
+          {
+            id: 3,
+            category: "Action",
+          },
+          {
+            id: 4,
+            category: "Adventure",
+          },
+          {
+            id: 5,
+            category: "Collector Simulator",
+          },
+          {
+            id: 6,
+            category: "Tycoon",
+          },
+          {
+            id: 7,
+            category: "Tycoon & Strategy",
+          },
+        ].map(async (category) => {
+          await this.gameCategory.create(category);
+        })
+      );
     } catch (error) {
       console.log(error);
     }

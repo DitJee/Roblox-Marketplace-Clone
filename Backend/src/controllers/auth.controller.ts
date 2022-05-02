@@ -35,6 +35,8 @@ class Authentication {
           },
         });
 
+        console.log(roles);
+
         await user.setRoles(roles);
         res.send({ message: "User was registered successfully!" });
       } else {

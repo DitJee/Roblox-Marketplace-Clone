@@ -12,7 +12,7 @@ const gameCategoryPreCheck = new GameCategoryPreCheck();
 /* 
     Game routes     
 */
-gameRouter.get("/games", gameController.getAllRows);
+gameRouter.get("/games", gameController.getAllGames);
 gameRouter.post(
   "/games/insert",
   [gamePreCheck.checkDuplicateGameName],

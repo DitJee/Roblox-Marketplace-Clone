@@ -1,28 +1,32 @@
-import pool from "../dbconfig/dbconnector";
 import { GameInfo } from "../interfaces";
+import DB from "../models";
 
 class GamePreCheck {
-  private TABLE_NAME: string = "games";
+  private game;
+  constructor() {
+    const db = new DB();
+    this.game = db.game.game;
+  }
 
   public checkDuplicateGameName = async (req, res, next) => {
-    const client = await pool.connect();
-
     let bHasDuplicate: boolean = false;
     try {
       await Promise.all(
         req.body.games.map(async (game) => {
           const gameName: string = game.name;
 
-          const sql = `SELECT name FROM ${this.TABLE_NAME} WHERE name = ($1)`;
-
           try {
-            const { rows } = await client.query(sql, [gameName]);
+            const game: string = await this.game.findOne({
+              where: {
+                name: gameName,
+              },
+            });
 
-            if (rows.length > 0) {
+            if (game) {
               bHasDuplicate = true;
             }
           } catch (error) {
-            console.log("error occured", error);
+            console.log("error occurred", error);
           }
         })
       );
@@ -36,8 +40,9 @@ class GamePreCheck {
         next();
       }
     } catch (err) {
+      console.log(err);
       res.status(400).send({
-        message: "error occured",
+        message: "middleware error occured",
         err: err,
       });
       return;
