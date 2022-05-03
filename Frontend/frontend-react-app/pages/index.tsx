@@ -34,7 +34,7 @@ export async function getStaticProps() {
 export default function StartingPage(props) {
   return (
     <Router>
-      <div className="4er">
+      <div className="App">
         <Head>
           <title>ROBLOCK</title>
           <link rel="icon" href="/favicon.ico" />

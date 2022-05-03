@@ -54,7 +54,7 @@ const Dashboard = () => {
             >
               {gameInfo.map((info, index) => {
                 if (index < 5)
-                  // ! hardcoded
+                  // TODO: Hardcoded
                   return (
                     <Card
                       thumbnail={info.thumbnail}

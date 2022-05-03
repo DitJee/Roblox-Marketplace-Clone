@@ -9,6 +9,7 @@ import {
 import { Link } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import PostLoginHeader from './PostLoginHeader';
+import Footer from './Footer';
 
 const Home = () => {
   return (
@@ -20,6 +21,8 @@ const Home = () => {
           <Dashboard />
         </section>
       </main>
+
+      <Footer />
     </div>
   );
 };
