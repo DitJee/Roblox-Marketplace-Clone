@@ -4,6 +4,7 @@ import User from "./user.model";
 import Role from "./role.model";
 import Game from "./game.model";
 import GameCategory from "./gameCategory.model";
+import Group from "./group.model";
 
 const dbConfig = new DbConfig();
 
@@ -21,6 +22,7 @@ class DB {
   public ROLES: string[];
   public game;
   public gameCategory;
+  public group;
 
   constructor() {
     this.Sequelize = Sequelize;
@@ -29,6 +31,7 @@ class DB {
     this.role = new Role(this.sequelize, this.Sequelize);
     this.game = new Game(this.sequelize, this.Sequelize);
     this.gameCategory = new GameCategory(this.sequelize, this.Sequelize);
+    this.group = new Group(this.sequelize, this.Sequelize);
 
     this.role.role.belongsToMany(this.user.user, {
       through: "user_roles",
@@ -44,6 +47,29 @@ class DB {
 
     this.ROLES = ["user", "admin", "moderator"];
 
+    this.user.user.belongsToMany(this.group.group, {
+      as: "Subscriptions",
+      through: "user_groups",
+      foreignKey: "userId",
+    });
+
+    this.user.user.belongsToMany(this.user.user, {
+      as: "Friends",
+      through: "friends",
+    });
+    this.user.user.belongsToMany(this.user.user, {
+      as: "Requestees",
+      through: "friendRequests",
+      foreignKey: "requesterId",
+      onDelete: "CASCADE",
+    });
+    this.user.user.belongsToMany(this.user.user, {
+      as: "Requesters",
+      through: "friendRequests",
+      foreignKey: "requesteeId",
+      onDelete: "CASCADE",
+    });
+
     this.game.game.belongsToMany(this.gameCategory.gameCategory, {
       through: "game_categories",
       foreignKey: "gameId",
@@ -54,6 +80,13 @@ class DB {
       through: "game_categories",
       foreignKey: "gameCategoryId",
       otherKey: "gameId",
+    });
+
+    //TEAM
+    this.group.group.belongsToMany(this.user.user, {
+      as: "Members",
+      through: "user_groups",
+      foreignKey: this.group.group.id,
     });
   }
 }

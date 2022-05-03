@@ -1,29 +1,33 @@
 import express, { Router } from "express";
 import User from "../controllers/user.controller";
 import { AuthJwt } from "../middleware/index";
+import AddFriend from "../middleware/verifyAddFriend";
 
-const authorizationRouter = Router();
+const userRouter = Router();
 const authJwt = new AuthJwt();
 const userController = new User();
-
+const addFriend = new AddFriend();
 /* 
-    Authorization routes     
+    User routes     
 */
-authorizationRouter.get("/test/all", userController.allAccess);
+userRouter.get("/test/all", userController.allAccess);
 
-authorizationRouter.get(
-  "/test/user",
-  [authJwt.verifyToken],
-  userController.userBoard
-);
-authorizationRouter.get(
+userRouter.get("/test/user", [authJwt.verifyToken], userController.userBoard);
+userRouter.get(
   "/test/mod",
   [authJwt.verifyToken, authJwt.isModerator],
   userController.moderatorBoard
 );
-authorizationRouter.get(
+userRouter.get(
   "/test/admin",
   [authJwt.verifyToken, authJwt.isAdmin],
   userController.adminBoard
 );
-export default authorizationRouter;
+
+userRouter.post(
+  "/user/add-friend",
+  [addFriend.checkIfAddSelf],
+  userController.addFriend
+);
+
+export default userRouter;

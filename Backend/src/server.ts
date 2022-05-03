@@ -6,7 +6,7 @@ import cors from "cors";
 import { CorsOption } from "./interfaces";
 import DB from "./models";
 import authenticationRouter from "./routers/auth.routes";
-import authorizationRouter from "./routers/user.routes";
+import userRouter from "./routers/user.routes";
 import gameRouter from "./routers/games/games.router";
 import "dotenv/config";
 import e from "express";
@@ -51,7 +51,7 @@ class Server {
 
     this.app.use("/api", authenticationRouter);
 
-    this.app.use("/api", authorizationRouter);
+    this.app.use("/api", userRouter);
 
     this.app.use("/api", gameRouter);
   }
