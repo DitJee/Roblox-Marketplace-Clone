@@ -15,7 +15,22 @@ class GameController {
   public getAllGames = async (req, res) => {
     try {
       const games = await this.game.findAll();
-      res.send(games);
+
+      let _categories = [];
+
+      await Promise.all(
+        games.map(async (game) => {
+          const category = await game.getGameCategories();
+          _categories.push(category[0].toJSON().game_categories);
+        })
+      );
+
+      console.log("_categories", _categories);
+      res.send({
+        message: "Succesfully get all games",
+        games: games,
+        categories: _categories,
+      });
     } catch (error) {
       console.log(error);
       res.status(400).send(error);

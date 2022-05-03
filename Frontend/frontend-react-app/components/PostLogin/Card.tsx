@@ -24,6 +24,7 @@ function Card({
           <Image
             className="rounded-lg"
             src={thumbnail}
+            alt="https://picsum.photos/id/1/200/300"
             layout="fill"
             objectFit="cover"
             objectPosition="top"

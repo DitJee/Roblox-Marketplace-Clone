@@ -11,7 +11,7 @@ import {
 } from '@heroicons/react/solid';
 const Footer = () => {
   return (
-    <footer className="bg-gray-100 text-center mt-5">
+    <footer className="bg-gray-300 text-center mt-5 inset-x-0 bottom-0">
       <div className="items-center p-3">
         <div className="grid lg:grid-cols-9   md:grid-cols-4">
           {[
@@ -53,15 +53,15 @@ const Footer = () => {
             },
           ].map((context) => {
             return (
-              <a href={context.link}>
+              <a key={context.name} href={context.link}>
                 <h5 className=" font-bold text-gray-600">{context.name}</h5>
               </a>
             );
           })}
         </div>
       </div>
-
-      <div className="text-gray-700 text-center p-2 bg-gray-100">
+      <hr className="my-1 border-gray-200 sm:mx-auto dark:border-gray-700 " />
+      <div className="text-gray-700 text-center p-2 bg-gray-300">
         © 2021 Copyright:
         <a className="text-gray-800" href="https://tailwind-elements.com/">
           Jee Entertainment
