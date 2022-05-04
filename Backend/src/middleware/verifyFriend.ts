@@ -96,7 +96,7 @@ class FriendPreCheck {
         req.body.user.id
       );
 
-      if (pair && pair.friend_id === req.body.friend.id) {
+      if (pair && pair.friendId === req.body.friend.id) {
         next();
       } else {
         res.status(400).send({

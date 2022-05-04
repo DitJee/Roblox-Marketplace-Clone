@@ -6,6 +6,7 @@ import Game from "./game.model";
 import GameCategory from "./gameCategory.model";
 import Group from "./group.model";
 import Friends from "./friend.model";
+import FriendRequests from "./friendRequest.model";
 
 const dbConfig = new DbConfig();
 
@@ -25,6 +26,7 @@ class DB {
   public gameCategory;
   public group;
   public friend;
+  public friendRequests;
 
   constructor() {
     this.Sequelize = Sequelize;
@@ -35,6 +37,7 @@ class DB {
     this.gameCategory = new GameCategory(this.sequelize, this.Sequelize);
     this.group = new Group(this.sequelize, this.Sequelize);
     this.friend = new Friends(this.sequelize, this.Sequelize);
+    this.friendRequests = new FriendRequests(this.sequelize, this.Sequelize);
 
     this.role.role.belongsToMany(this.user.user, {
       through: "user_roles",
@@ -58,21 +61,21 @@ class DB {
 
     this.user.user.belongsToMany(this.user.user, {
       as: "Requestees",
-      through: "friendRequests",
+      through: this.friendRequests.friendRequests,
       foreignKey: "requesterId",
       onDelete: "CASCADE",
     });
     this.user.user.belongsToMany(this.user.user, {
       as: "Requesters",
-      through: "friendRequests",
+      through: this.friendRequests.friendRequests,
       foreignKey: "requesteeId",
       onDelete: "CASCADE",
     });
 
     this.user.user.belongsToMany(this.user.user, {
-      as: "Friends",
+      as: "friend",
       through: this.friend.friend,
-      foreignKey: "friend_id",
+      foreignKey: "userId",
       onDelete: "CASCADE",
     });
 

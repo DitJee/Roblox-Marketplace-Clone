@@ -32,7 +32,7 @@ class FriendHelper {
       // get both requester and requestee
       const _friend = await friend.findOne({
         where: {
-          user_id: userId,
+          userId: userId,
         },
       });
 

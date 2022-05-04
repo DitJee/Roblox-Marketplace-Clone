@@ -6,12 +6,14 @@ import DB from "../models";
 class User {
   private User;
   private Friend;
+  private FriendRequests;
 
   constructor() {
     const db = new DB();
 
     this.User = db.user.user;
     this.Friend = db.friend.friend;
+    this.FriendRequests = db.friendRequests.friendRequests;
   }
 
   public allAccess = (req, res) => {
@@ -61,6 +63,13 @@ class User {
       );
 
       // delete friend request regardless of user choices
+      this.FriendRequests.destroy({
+        where: {
+          requesterId: req.body.requester.id,
+          requesteeId: req.body.requestee.id,
+        },
+      });
+
       const bIsAccept = req.body.operation.bIsAccept;
 
       if (bIsAccept) {
@@ -68,9 +77,8 @@ class User {
 
         // set new friend
         const request = await this.Friend.create({
-          user_id: req.body.requester.id,
-          friend_id: req.body.requestee.id,
-          FriendId: req.body.requestee.id,
+          userId: req.body.requester.id,
+          friendId: req.body.requestee.id,
         });
 
         res.send({
@@ -93,7 +101,7 @@ class User {
     try {
       const friendInfo = await this.Friend.findAll({
         where: {
-          user_id: req.body.user.id,
+          userId: req.body.user.id,
         },
       });
 
@@ -106,7 +114,7 @@ class User {
               try {
                 const friend = await this.User.findOne({
                   where: {
-                    id: info.friend_id,
+                    id: info.friendId,
                   },
                 });
 
@@ -143,8 +151,8 @@ class User {
     try {
       const result = await this.Friend.destroy({
         where: {
-          user_id: req.body.user.id,
-          friend_id: req.body.friend.id,
+          userId: req.body.user.id,
+          friendId: req.body.friend.id,
         },
       });
 
