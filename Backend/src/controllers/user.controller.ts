@@ -1,3 +1,5 @@
+import { error } from "console";
+import FriendHelper from "../helpers/friend.helper";
 import DB from "../models";
 
 class User {
@@ -27,19 +29,16 @@ class User {
 
   public addFriend = async (req, res) => {
     try {
-      // get IDs
-      const requesterId = req.body.requester.id;
-      const requesteeId = req.body.requestee.id;
+      const pair = await FriendHelper.getRequestingPair(
+        this.User,
+        req.body.requester.id,
+        req.body.requestee.id
+      );
 
-      // get both requester and requestee
-      const requester = await this.User.findOne({
-        where: {
-          id: requesterId,
-        },
-      });
+      if (pair.requestee === null || pair.requester === null) throw new error();
 
       // set new association
-      const request = await requester.setRequestees(requesteeId);
+      const request = await pair.requester.setRequestees(req.body.requestee.id);
 
       res.send({
         message: "User was registered successfully!",
@@ -48,6 +47,44 @@ class User {
     } catch (err) {
       res.status(500).send({ message: err.message });
     }
+  };
+
+  public handleFriendRequest = async (req, res) => {
+    try {
+      const pair = await FriendHelper.getRequestingPair(
+        this.User,
+        req.body.requester.id,
+        req.body.requestee.id
+      );
+
+      // delete friend request regardless of user choices
+      const bIsAccept = req.body.operation.bIsAccept;
+
+      if (bIsAccept) {
+        // accept friend request
+
+        // set new friend
+        const request = await pair.requester.setFriends(req.body.requestee.id);
+
+        res.send({
+          message: "Friend request successfully accepted!",
+          request: request,
+        });
+      } else {
+        // decline friend request
+        res.send({
+          message: "Friend request successfully declined!",
+          request: null,
+        });
+      }
+    } catch (err) {
+      res.status(500).send({ message: err.message });
+    }
+  };
+
+  public getAllFriends = async (req, res) => {
+    try {
+    } catch (err) {}
   };
 }
 

@@ -73,6 +73,7 @@ class Server {
   };
   public initialize = async () => {
     try {
+      // Add default roles
       Promise.all(
         [
           {
@@ -92,6 +93,7 @@ class Server {
         })
       );
 
+      // add default categories
       Promise.all(
         [
           {
