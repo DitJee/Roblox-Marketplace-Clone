@@ -42,7 +42,7 @@ export default function StartingPage(props) {
         <Routes>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
-          <Route path="/home" element={<Home />}></Route>
+          <Route path="/home/*" element={<Home />}></Route>
           <Route path="" element={<Navigate to="/login" />} />
         </Routes>
       </div>

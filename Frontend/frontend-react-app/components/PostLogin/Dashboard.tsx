@@ -3,7 +3,7 @@ import { CategoryInfo, GameInfo } from '../../interfaces';
 import gameCategoryService from '../../Services/game/gameCategory.service';
 import gameService from '../../Services/game/games.service';
 import Card from './Card';
-import SmallProfileCard from './Profile/smallProfileCard';
+import SmallProfileCard from './Profile/SmallProfileCard';
 import Sidebar from './Sidebar';
 
 const Dashboard = ({ showSidebar }) => {

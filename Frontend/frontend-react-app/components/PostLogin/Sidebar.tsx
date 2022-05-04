@@ -15,6 +15,7 @@ import {
   OfficeBuildingIcon,
   LibraryIcon,
 } from '@heroicons/react/outline';
+import { Link } from 'react-router-dom';
 
 const Sidebar = ({ isVisible }) => {
   const settings: { noHeader: string; withHeader: string } = {
@@ -27,12 +28,12 @@ const Sidebar = ({ isVisible }) => {
     <div className={isVisible ? settings.withHeader : settings.noHeader}>
       <div className="flex items-center  cursor-pointer ">
         {!isVisible && (
-          <>
+          <Link to="">
             <OfficeBuildingIcon className="h-8  text-gray-700"></OfficeBuildingIcon>
             <h1 className=" flex text-3xl font-normal leading-normal mt-0  text-gray-700 cursor-pointer">
               ROBLOCK
             </h1>
-          </>
+          </Link>
         )}
       </div>
       {[

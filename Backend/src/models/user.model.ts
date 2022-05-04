@@ -20,6 +20,8 @@ class User {
       },
       about: {
         type: Sequelize.STRING(1000),
+        defaultValue:
+          "I am Dit Dejphachon, an aerospace engineering student who has a strong passion for software engineering and game development. I have worked on many projects related to unmanned aircraft system, full stack web development, and game development. I attached my resume which contains my background and experience for your interest. Please contact me at +xx xx-xxx-xxxx or by email Ditdejphachon@gmail.com for more information",
       },
       wearing_hair: {
         type: Sequelize.STRING(),

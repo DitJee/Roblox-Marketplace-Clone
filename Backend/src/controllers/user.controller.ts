@@ -32,6 +32,21 @@ class User {
     res.status(200).send("Moderator Content.");
   };
 
+  public updateUserInfo = async (req, res) => {
+    try {
+      const result = await this.User.update(req.body.user, {
+        where: { id: req.body.user.id },
+      });
+
+      res.send({
+        message: "User info was successfully updated!",
+        result: result,
+      });
+    } catch (err) {
+      res.status(500).send({ message: err.message });
+    }
+  };
+
   public addFriend = async (req, res) => {
     try {
       const pair = await FriendHelper.getRequestingPair(
@@ -47,7 +62,7 @@ class User {
 
       res.send({
         message: "User was registered successfully!",
-        request: request,
+        result: request,
       });
     } catch (err) {
       res.status(500).send({ message: err.message });
@@ -83,13 +98,13 @@ class User {
 
         res.send({
           message: "Friend request successfully accepted!",
-          request: request,
+          result: request,
         });
       } else {
         // decline friend request
         res.send({
           message: "Friend request successfully declined!",
-          request: null,
+          result: null,
         });
       }
     } catch (err) {

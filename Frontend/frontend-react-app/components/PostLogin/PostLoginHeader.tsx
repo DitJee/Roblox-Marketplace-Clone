@@ -10,10 +10,11 @@ import {
   BellIcon,
 } from '@heroicons/react/solid';
 import Sidebar from './Sidebar';
+import { Link } from 'react-router-dom';
 
 const PostLoginHeader = ({ isVisible, onClickSidebarToggle, showSidebar }) => {
   return (
-    <>
+    <div>
       <header className="sticky top-0 z-50 grid grid-cols-3 items-center   bg-gray-300 shadow-md p-5 md:px-10">
         {/* 
             left 
@@ -22,13 +23,15 @@ const PostLoginHeader = ({ isVisible, onClickSidebarToggle, showSidebar }) => {
           <button onClick={onClickSidebarToggle}>
             <MenuIcon className=" h-6 cursor-pointer "></MenuIcon>
           </button>
-          <div className="flex items-center  cursor-pointer ">
-            <OfficeBuildingIcon className="h-8  "></OfficeBuildingIcon>
+          <Link to="">
+            <div className="flex items-center  cursor-pointer ">
+              <OfficeBuildingIcon className="h-8  "></OfficeBuildingIcon>
 
-            <h1 className=" flex text-3xl font-normal leading-normal mt-0  text-gray-700 cursor-pointer">
-              ROBLOCK
-            </h1>
-          </div>
+              <h1 className=" flex text-3xl font-normal leading-normal mt-0  text-gray-700 cursor-pointer">
+                ROBLOCK
+              </h1>
+            </div>
+          </Link>
 
           {[
             {
@@ -83,7 +86,7 @@ const PostLoginHeader = ({ isVisible, onClickSidebarToggle, showSidebar }) => {
         </div>
       </header>
       {showSidebar && <Sidebar isVisible={isVisible} />}
-    </>
+    </div>
   );
 };
 

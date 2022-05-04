@@ -49,4 +49,10 @@ userRouter.delete(
   [friendPreCheck.checkIfIsFriend],
   userController.deleteFriend
 );
+
+userRouter.put(
+  "/user/update",
+  [userPreCheck.checkIfUserExist],
+  userController.updateUserInfo
+);
 export default userRouter;
