@@ -99,6 +99,11 @@ const Sidebar = ({ isVisible }) => {
           link: 'https://www.linkedin.com/company/earthshine-games/mycompany/',
           icon: <GiftIcon className="mr-2 h-5 text-gray-700"></GiftIcon>,
         },
+        {
+          name: 'Events',
+          link: 'https://www.linkedin.com/company/earthshine-games/mycompany/',
+          icon: <LibraryIcon className="mr-2 h-5 text-gray-700"></LibraryIcon>,
+        },
       ].map((context) => {
         return (
           <div className="flex items-center justify-left mb-1 mt-2">
@@ -112,12 +117,6 @@ const Sidebar = ({ isVisible }) => {
       <button className="bg-gray-500  hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
         Get Premium
       </button>
-      <div className="flex items-center justify-left mb-1 mt-2">
-        <LibraryIcon className="mr-2 h-5 text-gray-700"></LibraryIcon>
-        <a href="https://www.linkedin.com/company/earthshine-games/mycompany/">
-          <h5 className=" font-bold text-gray-600">Events</h5>
-        </a>
-      </div>
     </div>
   );
 };

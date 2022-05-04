@@ -3,13 +3,13 @@ import Image from 'next/image';
 import { GameInfo } from '../../interfaces';
 import { EyeIcon, HeartIcon } from '@heroicons/react/solid';
 
-function Card({
+const Card = ({
   thumbnail,
   name,
   likePercentage,
   viewCount,
   category,
-}: GameInfo) {
+}: GameInfo) => {
   return (
     <div>
       <div
@@ -42,6 +42,6 @@ function Card({
       </div>
     </div>
   );
-}
+};
 
 export default Card;

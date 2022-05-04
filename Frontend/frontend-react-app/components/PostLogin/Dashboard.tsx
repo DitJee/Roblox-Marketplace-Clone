@@ -3,6 +3,7 @@ import { CategoryInfo, GameInfo } from '../../interfaces';
 import gameCategoryService from '../../Services/game/gameCategory.service';
 import gameService from '../../Services/game/games.service';
 import Card from './Card';
+import SmallProfileCard from './Profile/smallProfileCard';
 import Sidebar from './Sidebar';
 
 const Dashboard = ({ showSidebar }) => {
@@ -38,6 +39,7 @@ const Dashboard = ({ showSidebar }) => {
   return (
     <div className="">
       <div>
+        <SmallProfileCard />
         {[
           'Fighting & Battle',
           'Role-Playing',

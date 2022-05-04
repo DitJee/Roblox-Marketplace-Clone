@@ -26,11 +26,12 @@ const Home = () => {
         <PostLoginHeader
           onClickSidebarToggle={onClickSidebarToggle}
           showSidebar={showSidebar}
+          isVisible={undefined}
         />
       </TrackVisibility>
 
       <main className="max-w-8xl mx-auto  px-32 sm:px-16">
-        <section className="pl-40">
+        <section className="pl-72">
           <Dashboard showSidebar={showSidebar} />
         </section>
       </main>

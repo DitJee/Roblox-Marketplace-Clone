@@ -11,7 +11,7 @@ import {
 } from '@heroicons/react/solid';
 const Footer = () => {
   return (
-    <footer className="bg-gray-300 text-center mt-5 inset-x-0 bottom-0">
+    <footer className="bg-gray-300 text-center mt-5 inset-x-0 bottom-0 z-50">
       <div className="items-center p-3">
         <div className="grid lg:grid-cols-9   md:grid-cols-4">
           {[
