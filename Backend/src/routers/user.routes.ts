@@ -1,12 +1,14 @@
 import express, { Router } from "express";
 import User from "../controllers/user.controller";
 import { AuthJwt } from "../middleware/index";
-import Friend from "../middleware/verifyFriend";
+import FriendPreCheck from "../middleware/verifyFriend";
+import UserPreCheck from "../middleware/verifyuser";
 
 const userRouter = Router();
 const authJwt = new AuthJwt();
 const userController = new User();
-const friend = new Friend();
+const friendPreCheck = new FriendPreCheck();
+const userPreCheck = new UserPreCheck();
 /* 
     User routes     
 */
@@ -26,13 +28,25 @@ userRouter.get(
 
 userRouter.post(
   "/user/add-friend",
-  [friend.checkIfAddSelf],
+  [friendPreCheck.checkIfAddSelf],
   userController.addFriend
 );
 
 userRouter.post(
   "/user/handle-friend-request",
-  [friend.checkIfRequestExist],
+  [friendPreCheck.checkIfRequestExist],
   userController.handleFriendRequest
+);
+
+userRouter.get(
+  "/user/get-friends",
+  [userPreCheck.checkIfUserExist],
+  userController.getAllFriends
+);
+
+userRouter.delete(
+  "/user/delete-friend",
+  [friendPreCheck.checkIfIsFriend],
+  userController.deleteFriend
 );
 export default userRouter;

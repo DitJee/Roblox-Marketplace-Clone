@@ -1,55 +1,73 @@
 import FriendHelper from "../helpers/friend.helper";
+import UserHelper from "../helpers/user.helper";
 import DB from "../models";
 
-class Friend {
+class FriendPreCheck {
   private User;
+  private Friend;
+
   constructor() {
     const db = new DB();
     this.User = db.user.user;
+    this.Friend = db.friend.friend;
   }
 
   public checkIfAddSelf = async (req, res, next): Promise<void> => {
-    const pair = await FriendHelper.getRequestingPair(
-      this.User,
-      req.body.requester.id,
-      req.body.requestee.id
-    );
+    try {
+      const pair = await FriendHelper.getRequestingPair(
+        this.User,
+        req.body.requester.id,
+        req.body.requestee.id
+      );
 
-    const result = this.checkIfPairExist(res, pair.requestee, pair.requester);
-    if (!result) return;
+      const result = this.checkIfPairExist(res, pair.requestee, pair.requester);
+      if (!result) return;
 
-    if (req.body.requester.id === req.body.requestee.id) {
+      if (req.body.requester.id === req.body.requestee.id) {
+        res.status(400).send({
+          message: "same id bruh!",
+        });
+        return;
+      }
+
+      next();
+    } catch (err) {
       res.status(400).send({
-        message: "same id bruh!",
+        message: err.message,
       });
       return;
     }
-
-    next();
   };
 
   public checkIfRequestExist = async (req, res, next): Promise<void> => {
-    const pair = await FriendHelper.getRequestingPair(
-      this.User,
-      req.body.requester.id,
-      req.body.requestee.id
-    );
+    try {
+      const pair = await FriendHelper.getRequestingPair(
+        this.User,
+        req.body.requester.id,
+        req.body.requestee.id
+      );
 
-    const result = this.checkIfPairExist(res, pair.requestee, pair.requester);
-    if (!result) return;
+      const result = this.checkIfPairExist(res, pair.requestee, pair.requester);
+      if (!result) return;
 
-    // get the request from requester using requestee id
-    const requestee = pair.requester.getRequestees({
-      where: {
-        requesteeId: req.body.requestee.id,
-      },
-    });
+      // get the request from requester using requestee id
+      const requestee = pair.requester.getRequestees({
+        where: {
+          requesteeId: req.body.requestee.id,
+        },
+      });
 
-    if (requestee) {
-      next();
-    } else {
+      if (requestee) {
+        next();
+      } else {
+        res.status(400).send({
+          message: "request does not exist",
+        });
+        return;
+      }
+    } catch (err) {
       res.status(400).send({
-        message: "request does not exist",
+        message: err.message,
       });
       return;
     }
@@ -70,6 +88,29 @@ class Friend {
       return true;
     }
   };
+
+  public checkIfIsFriend = async (req, res, next): Promise<void> => {
+    try {
+      const pair = await FriendHelper.getFriendById(
+        this.Friend,
+        req.body.user.id
+      );
+
+      if (pair && pair.friend_id === req.body.friend.id) {
+        next();
+      } else {
+        res.status(400).send({
+          message: "they are not friends",
+        });
+        return;
+      }
+    } catch (err) {
+      res.status(400).send({
+        message: err.message,
+      });
+      return;
+    }
+  };
 }
 
-export default Friend;
+export default FriendPreCheck;

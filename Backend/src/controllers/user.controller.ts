@@ -1,14 +1,17 @@
 import { error } from "console";
 import FriendHelper from "../helpers/friend.helper";
+import UserHelper from "../helpers/user.helper";
 import DB from "../models";
 
 class User {
   private User;
+  private Friend;
 
   constructor() {
     const db = new DB();
 
     this.User = db.user.user;
+    this.Friend = db.friend.friend;
   }
 
   public allAccess = (req, res) => {
@@ -64,7 +67,11 @@ class User {
         // accept friend request
 
         // set new friend
-        const request = await pair.requester.setFriends(req.body.requestee.id);
+        const request = await this.Friend.create({
+          user_id: req.body.requester.id,
+          friend_id: req.body.requestee.id,
+          FriendId: req.body.requestee.id,
+        });
 
         res.send({
           message: "Friend request successfully accepted!",
@@ -84,7 +91,70 @@ class User {
 
   public getAllFriends = async (req, res) => {
     try {
-    } catch (err) {}
+      const friendInfo = await this.Friend.findAll({
+        where: {
+          user_id: req.body.user.id,
+        },
+      });
+
+      if (friendInfo) {
+        const friends = [];
+
+        try {
+          await Promise.all(
+            friendInfo.map(async (info) => {
+              try {
+                const friend = await this.User.findOne({
+                  where: {
+                    id: info.friend_id,
+                  },
+                });
+
+                if (friend) friends.push(friend);
+              } catch (err) {
+                res.send({
+                  message: err.message,
+                });
+              }
+            })
+          );
+
+          res.send({
+            message: `Successfully get friends using userId ${req.body.user.id}`,
+            friends: friends,
+          });
+        } catch (err) {
+          res.send({
+            message: err.message,
+          });
+        }
+      } else {
+        res.send({
+          message: `Cannot get friends using userId ${req.body.user.id}`,
+          friends: null,
+        });
+      }
+    } catch (err) {
+      res.status(500).send({ message: err.message });
+    }
+  };
+
+  public deleteFriend = async (req, res) => {
+    try {
+      const result = await this.Friend.destroy({
+        where: {
+          user_id: req.body.user.id,
+          friend_id: req.body.friend.id,
+        },
+      });
+
+      res.send({
+        message: `delete userId ${req.body.friend.id} from userId ${req.body.user.id}`,
+        result: result,
+      });
+    } catch (err) {
+      res.status(500).send({ message: err.message });
+    }
   };
 }
 

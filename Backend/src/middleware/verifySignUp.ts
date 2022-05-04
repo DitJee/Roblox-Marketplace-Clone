@@ -14,35 +14,42 @@ class SignUp {
     res,
     next
   ): Promise<void> => {
-    // Username
-    const user: string = await this.User.findOne({
-      where: {
-        username: req.body.username,
-      },
-    });
+    try {
+      // Username
+      const user: string = await this.User.findOne({
+        where: {
+          username: req.body.username,
+        },
+      });
 
-    if (user) {
+      if (user) {
+        res.status(400).send({
+          message: "Failed! Username is already in use!",
+        });
+        return;
+      }
+
+      // Email
+      const email: string = await this.User.findOne({
+        where: {
+          email: req.body.email,
+        },
+      });
+
+      if (email) {
+        res.status(400).send({
+          message: "Failed! Email is already in use!",
+        });
+        return;
+      }
+
+      next();
+    } catch (err) {
       res.status(400).send({
-        message: "Failed! Username is already in use!",
+        message: err.message,
       });
       return;
     }
-
-    // Email
-    const email: string = await this.User.findOne({
-      where: {
-        email: req.body.email,
-      },
-    });
-
-    if (email) {
-      res.status(400).send({
-        message: "Failed! Email is already in use!",
-      });
-      return;
-    }
-
-    next();
   };
 
   public checkRolesExisted = async (req, res, next) => {

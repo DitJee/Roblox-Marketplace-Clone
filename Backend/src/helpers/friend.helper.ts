@@ -26,6 +26,21 @@ class FriendHelper {
       };
     }
   };
+
+  public static getFriendById = async (friend, userId) => {
+    try {
+      // get both requester and requestee
+      const _friend = await friend.findOne({
+        where: {
+          user_id: userId,
+        },
+      });
+
+      return _friend;
+    } catch (err) {
+      return null;
+    }
+  };
 }
 
 export default FriendHelper;
