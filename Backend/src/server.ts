@@ -10,6 +10,7 @@ import userRouter from "./routers/user.routes";
 import gameRouter from "./routers/games/games.router";
 import "dotenv/config";
 import e from "express";
+import creationRouter from "./routers/creation.routes";
 
 class Server {
   private app;
@@ -54,6 +55,8 @@ class Server {
     this.app.use("/api", userRouter);
 
     this.app.use("/api", gameRouter);
+
+    this.app.use("/api", creationRouter);
   }
 
   public dbSync = async () => {

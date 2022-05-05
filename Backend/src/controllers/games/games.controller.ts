@@ -53,7 +53,6 @@ class GameController {
               likePercentage: likePercentage,
               viewCount: viewCount,
             });
-            console.log(addedGame);
 
             addedRows.push(addedGame);
 
@@ -62,8 +61,6 @@ class GameController {
                 id: category,
               },
             });
-
-            console.log(categories);
 
             await addedGame.setGameCategories(categories);
           })

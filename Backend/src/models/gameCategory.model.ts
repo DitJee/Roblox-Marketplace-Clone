@@ -8,6 +8,7 @@ class GameCategory {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
       },
       category: {
         type: Sequelize.STRING,
