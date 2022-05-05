@@ -1,8 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import UserService from '../../../Services/user.service';
+import { UserInfo } from '../../../interfaces';
 
 const ProfileCardWithInfo = ({ user }) => {
   // TODO: fetch the real number
+
+  const [friendCount, setFriendCount] = useState(0);
+  const [followerCount, setFollowerCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
+
+  const userInfo: UserInfo = user.info;
+
+  const getProfileInfo = async () => {
+    try {
+      const friends = await UserService.getFriends(userInfo.id);
+      const followers = await UserService.getFollower(userInfo.id);
+      const followings = await UserService.getFollowing(userInfo.id);
+
+      setFriendCount(friends.friends.length);
+      setFollowerCount(followers.result.length);
+      setFollowingCount(followings.result.length);
+    } catch (error) {
+      setFriendCount(0);
+      setFollowerCount(0);
+      setFollowingCount(0);
+
+      console.error(error);
+    }
+  };
+
   const bigNumber = (number) => {
     return (
       <div className=" ml-3 mr-3 text-2xl font-bold  dark:text-gray-800">
@@ -14,6 +41,10 @@ const ProfileCardWithInfo = ({ user }) => {
   const smallContext = (context) => {
     return <div className="mt-1">{context + ':'}</div>;
   };
+
+  useEffect(() => {
+    getProfileInfo();
+  }, []);
 
   return (
     <div className="grid grid-cols-4 bg-gray-100 rounded-md py-2 ">
@@ -37,12 +68,15 @@ const ProfileCardWithInfo = ({ user }) => {
           {[
             {
               context: 'Friends',
+              count: friendCount,
             },
             {
               context: 'Followers',
+              count: followerCount,
             },
             {
               context: 'Following',
+              count: followingCount,
             },
           ].map((info) => {
             return (
@@ -51,7 +85,7 @@ const ProfileCardWithInfo = ({ user }) => {
                 className="flex text-1xl font-normal leading-normal dark:text-gray-600 mt-4"
               >
                 {smallContext(info.context)}
-                {bigNumber(5)}
+                {info.count}
               </h4>
             );
           })}

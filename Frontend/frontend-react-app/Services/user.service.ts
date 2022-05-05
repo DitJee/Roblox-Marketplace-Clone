@@ -39,7 +39,47 @@ class UserService {
 
       return response.data;
     } catch (err) {
-      throw new Error(err);
+      console.error(err);
+      return null;
+    }
+  };
+
+  public getFriends = async (userId: number) => {
+    const url: string = this.USER_URL + '/get-friends';
+
+    const payload = {
+      user: {
+        id: userId,
+      },
+    };
+    try {
+      const response = await axios.get(url, payload);
+      return response.data;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  };
+
+  public getFollower = async (payload) => {
+    const url: string = this.USER_URL + '/get-follower';
+    try {
+      const response = await axios.get(url, payload);
+      return response.data;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  };
+
+  public getFollowing = async (payload) => {
+    const url: string = this.USER_URL + '/get-following';
+    try {
+      const response = await axios.get(url, payload);
+      return response.data;
+    } catch (err) {
+      console.error(err);
+      return null;
     }
   };
 }

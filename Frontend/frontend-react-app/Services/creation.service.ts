@@ -43,6 +43,7 @@ class CreationService {
     }
   };
 
+  // TODO: add type to the payload
   public addCreation = async (payload) => {
     const url: string = this.Creation_URL + '/add';
 
@@ -55,6 +56,7 @@ class CreationService {
     }
   };
 
+  // TODO: add type to the payload
   public updateCreationInfo = async (payload) => {
     const url: string = this.Creation_URL + '/update';
 
@@ -67,10 +69,12 @@ class CreationService {
 
       return response.data;
     } catch (err) {
+      console.error(err);
       return null;
     }
   };
 
+  // TODO: add type to the payload
   public deleteCreation = async (payload) => {
     const url: string = this.Creation_URL + '/delete';
 
@@ -83,6 +87,7 @@ class CreationService {
 
       return response.data;
     } catch (err) {
+      console.error(err);
       return null;
     }
   };
