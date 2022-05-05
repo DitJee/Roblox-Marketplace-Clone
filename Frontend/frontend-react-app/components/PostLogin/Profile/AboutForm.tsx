@@ -49,7 +49,7 @@ const AboutForm = ({ user }) => {
 
   return (
     <>
-      <h1 className="text-3xl font-bold leading-normal mt-2 dark:text-gray-800">
+      <h1 className="mb-2 text-3xl font-bold leading-normal mt-2 dark:text-gray-800">
         About
       </h1>
 
