@@ -65,3 +65,12 @@ export type UserInfo = {
   wearing_right_leg?: string;
   wearing_top?: string;
 };
+
+export type ExperienceCardFullInfo = {
+  thumbnail: string;
+  name: string;
+  description: string;
+  active: number;
+  visit: number;
+  like: number;
+};

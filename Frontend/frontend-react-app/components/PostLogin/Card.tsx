@@ -18,7 +18,7 @@ const Card = ({
         hover:scale-105
         transition transform duration-200
         ease-out
-    "
+        "
       >
         <div className="relative  h-40 w-32">
           <Image

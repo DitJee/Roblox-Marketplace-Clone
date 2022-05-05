@@ -14,7 +14,8 @@ const ProfileAbout = ({}) => {
       <AboutForm user={user} />
       <div className="mt-5 mb-5 flex-grow border-t border-gray-400"></div>
       <UserWearing />
-      <div className="mt-10 mb-5 flex-grow border-t border-gray-400"></div>
+      {/* <div className="mt-10 mb-5 flex-grow border-t border-gray-400"></div> */}
+      <div className="mt-10 mb-5 "></div>
       <UserStatistic />
     </div>
   );

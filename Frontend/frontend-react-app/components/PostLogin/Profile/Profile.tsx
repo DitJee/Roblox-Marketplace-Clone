@@ -15,8 +15,6 @@ const Profile = ({}) => {
   const [bIsInAbout, setbIsInAbout] = useState(true);
 
   useEffect(() => {
-    console.log('location', location);
-
     switch (location.pathname) {
       case '/home/profile':
         setbIsInAbout(true);
@@ -34,7 +32,7 @@ const Profile = ({}) => {
       <ProfileCardWithInfo user={user} />
       <AboutCreationSelectionBar bIsInAbout={bIsInAbout} />
       <Routes>
-        <Route path="creation" element={<ProfileCreation />}></Route>
+        <Route path="creation/*" element={<ProfileCreation />}></Route>
         <Route path="/" element={<ProfileAbout />}></Route>
       </Routes>
     </div>
