@@ -55,4 +55,23 @@ userRouter.put(
   [userPreCheck.checkIfUserExist],
   userController.updateUserInfo
 );
+
+userRouter.post(
+  "/user/follow",
+  [friendPreCheck.checkIfAddSelf],
+  userController.followUser
+);
+
+userRouter.delete(
+  "/user/unfollow",
+  [friendPreCheck.checkIfAddSelf],
+  userController.unFollowUser
+);
+
+userRouter.get(
+  "/user/get-follower",
+  [userPreCheck.checkIfUserExist],
+  userController.getFollower
+);
+
 export default userRouter;

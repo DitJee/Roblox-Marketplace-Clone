@@ -1,5 +1,4 @@
-import FriendHelper from "../helpers/friend.helper";
-import UserHelper from "../helpers/user.helper";
+import ModelHelper from "../helpers/model.helper";
 import DB from "../models";
 
 class UserPreCheck {
@@ -11,13 +10,17 @@ class UserPreCheck {
 
   public checkIfUserExist = async (req, res, next): Promise<void> => {
     try {
-      const user = await UserHelper.getUserById(this.User, req.body.user.id);
+      const user = await this.User.findOne({
+        where: {
+          id: req.body.user.id,
+        },
+      });
 
       if (user) {
         next();
       } else {
         res.status(400).send({
-          message: "same id bruh!",
+          message: "user does not exist",
         });
         return;
       }

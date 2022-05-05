@@ -1,5 +1,4 @@
-import FriendHelper from "../helpers/friend.helper";
-import UserHelper from "../helpers/user.helper";
+import ModelHelper from "../helpers/model.helper";
 import DB from "../models";
 
 class FriendPreCheck {
@@ -14,7 +13,7 @@ class FriendPreCheck {
 
   public checkIfAddSelf = async (req, res, next): Promise<void> => {
     try {
-      const pair = await FriendHelper.getRequestingPair(
+      const pair = await ModelHelper.getRequestingPair(
         this.User,
         req.body.requester.id,
         req.body.requestee.id
@@ -41,7 +40,7 @@ class FriendPreCheck {
 
   public checkIfRequestExist = async (req, res, next): Promise<void> => {
     try {
-      const pair = await FriendHelper.getRequestingPair(
+      const pair = await ModelHelper.getRequestingPair(
         this.User,
         req.body.requester.id,
         req.body.requestee.id
@@ -91,7 +90,7 @@ class FriendPreCheck {
 
   public checkIfIsFriend = async (req, res, next): Promise<void> => {
     try {
-      const pair = await FriendHelper.getFriendById(
+      const pair = await ModelHelper.getFriendById(
         this.Friend,
         req.body.user.id
       );

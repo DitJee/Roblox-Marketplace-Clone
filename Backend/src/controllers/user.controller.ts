@@ -1,12 +1,12 @@
 import { error } from "console";
-import FriendHelper from "../helpers/friend.helper";
-import UserHelper from "../helpers/user.helper";
+import ModelHelper from "../helpers/model.helper";
 import DB from "../models";
 
 class User {
   private User;
   private Friend;
   private FriendRequests;
+  private Follow;
 
   constructor() {
     const db = new DB();
@@ -14,6 +14,7 @@ class User {
     this.User = db.user.user;
     this.Friend = db.friend.friend;
     this.FriendRequests = db.friendRequests.friendRequests;
+    this.Follow = db.follow.follow;
   }
 
   public allAccess = (req, res) => {
@@ -49,7 +50,7 @@ class User {
 
   public addFriend = async (req, res) => {
     try {
-      const pair = await FriendHelper.getRequestingPair(
+      const pair = await ModelHelper.getRequestingPair(
         this.User,
         req.body.requester.id,
         req.body.requestee.id
@@ -71,7 +72,7 @@ class User {
 
   public handleFriendRequest = async (req, res) => {
     try {
-      const pair = await FriendHelper.getRequestingPair(
+      const pair = await ModelHelper.getRequestingPair(
         this.User,
         req.body.requester.id,
         req.body.requestee.id
@@ -174,6 +175,74 @@ class User {
       res.send({
         message: `delete userId ${req.body.friend.id} from userId ${req.body.user.id}`,
         result: result,
+      });
+    } catch (err) {
+      res.status(500).send({ message: err.message });
+    }
+  };
+
+  public followUser = async (req, res) => {
+    try {
+      const request = await this.Follow.create({
+        followerId: req.body.requester.id,
+        followedId: req.body.requestee.id,
+      });
+
+      res.send({
+        message: "Following was successful!",
+        result: request,
+      });
+    } catch (err) {
+      res.status(500).send({ message: err.message });
+    }
+  };
+
+  public unFollowUser = async (req, res) => {
+    try {
+      const request = await this.Follow.destroy({
+        where: {
+          followerId: req.body.requester.id,
+          followedId: req.body.requestee.id,
+        },
+      });
+
+      res.send({
+        message: "Unfollowing was successful!",
+        result: request,
+      });
+    } catch (err) {
+      res.status(500).send({ message: err.message });
+    }
+  };
+
+  public getFollower = async (req, res) => {
+    try {
+      const followers = await this.Follow.findAll({
+        where: {
+          followedId: req.body.user.id,
+        },
+      });
+
+      const _followers = [];
+
+      await Promise.all(
+        followers.map(async (follower) => {
+          try {
+            const followerInfo = await this.User.findOne({
+              where: {
+                id: follower.followerId,
+              },
+            });
+            _followers.push(followerInfo);
+          } catch (error) {
+            _followers.push(null);
+          }
+        })
+      );
+
+      res.send({
+        message: `Succesfully get the followers of user ${req.body.user.id}`,
+        result: _followers,
       });
     } catch (err) {
       res.status(500).send({ message: err.message });

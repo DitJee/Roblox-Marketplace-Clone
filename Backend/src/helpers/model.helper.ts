@@ -1,15 +1,15 @@
-class FriendHelper {
-  public static getRequestingPair = async (user, requesterId, requesteeId) => {
+class ModelHelper {
+  public static getRequestingPair = async (model, requesterId, requesteeId) => {
     try {
       // get both requester and requestee
-      const requester = await user.findOne({
+      const requester = await model.findOne({
         where: {
           id: requesterId,
         },
       });
 
       // get both requester and requestee
-      const requestee = await user.findOne({
+      const requestee = await model.findOne({
         where: {
           id: requesteeId,
         },
@@ -43,4 +43,4 @@ class FriendHelper {
   };
 }
 
-export default FriendHelper;
+export default ModelHelper;
