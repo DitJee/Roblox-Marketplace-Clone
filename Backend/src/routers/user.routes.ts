@@ -74,4 +74,10 @@ userRouter.get(
   userController.getFollower
 );
 
+userRouter.get(
+  "/user/get-following",
+  [userPreCheck.checkIfUserExist],
+  userController.getFollowing
+);
+
 export default userRouter;

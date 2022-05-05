@@ -18,7 +18,7 @@ class GameService {
       let data = response.data;
       return data;
     } catch (err) {
-      throw new Error(err);
+      return null;
     }
   };
 }

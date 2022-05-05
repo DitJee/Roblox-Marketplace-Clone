@@ -248,6 +248,40 @@ class User {
       res.status(500).send({ message: err.message });
     }
   };
+
+  public getFollowing = async (req, res) => {
+    try {
+      const followings = await this.Follow.findAll({
+        where: {
+          followerId: req.body.user.id,
+        },
+      });
+
+      const _followings = [];
+
+      await Promise.all(
+        followings.map(async (following) => {
+          try {
+            const followerInfo = await this.User.findOne({
+              where: {
+                id: following.followedId,
+              },
+            });
+            _followings.push(followerInfo);
+          } catch (error) {
+            _followings.push(null);
+          }
+        })
+      );
+
+      res.send({
+        message: `Succesfully get the followings of user ${req.body.user.id}`,
+        result: _followings,
+      });
+    } catch (err) {
+      res.status(500).send({ message: err.message });
+    }
+  };
 }
 
 export default User;
