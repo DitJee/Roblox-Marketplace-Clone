@@ -4,35 +4,29 @@ import { UserInfo, UserLocalStorage } from '../../../interfaces';
 import ExperienceToggle from './ExperienceToggle';
 import { Route, Routes } from 'react-router-dom';
 import ExperienceCardFull from './ExperienceCardFull';
+import { CreationInfo } from '../../../interfaces/index';
 
-const Experience_FullView = ({}) => {
+const Experience_FullView = ({ creationInfo }) => {
   const user: UserLocalStorage = JSON.parse(localStorage.getItem('user'));
   const userInfo: UserInfo = user.info;
-
-  // FIXME: receive the card information from parent component
 
   return (
     <div className="mt-10">
       <div className="my-5">
-        <ExperienceCardFull
-          key={userInfo.username}
-          thumbnail={userInfo.picture}
-          name={userInfo.username}
-          description={userInfo.about}
-          active={1}
-          visit={2}
-          like={3}
-        />
+        {creationInfo.map((context, index) => {
+          return (
+            <ExperienceCardFull
+              key={context.name}
+              thumbnail={context.thumbnail}
+              name={context.name}
+              description={context.description}
+              active={context.active}
+              visit={context.visit}
+              like={context.like}
+            />
+          );
+        })}
       </div>
-      <ExperienceCardFull
-        key={userInfo.username}
-        thumbnail={userInfo.picture}
-        name={userInfo.username}
-        description={userInfo.about}
-        active={1}
-        visit={2}
-        like={3}
-      />
     </div>
   );
 };

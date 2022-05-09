@@ -13,19 +13,19 @@ const friendPreCheck = new FriendPreCheck();
 const userPreCheck = new UserPreCheck();
 const creationPreCheck = new CreationPreCheck();
 
-creationRouter.get(
+creationRouter.post(
   "/creation/get/creation",
   [userPreCheck.checkIfUserExist],
   creationController.getCreationById
 );
 
-creationRouter.get(
+creationRouter.post(
   "/creation/get/user",
   [userPreCheck.checkIfUserExist],
   creationController.getCreationByUserId
 );
 
-creationRouter.get(
+creationRouter.post(
   "/creation/get-user",
   creationController.getUserByCreationId
 );

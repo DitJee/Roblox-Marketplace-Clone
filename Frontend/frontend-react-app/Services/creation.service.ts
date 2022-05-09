@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { CreationInfo, CreationPayload } from '../interfaces/index';
 import { UserInfo, UserLocalStorage } from '../interfaces';
 import APIHelper from './API-helper';
 
@@ -7,45 +8,33 @@ const API_PREFIX: string = APIHelper.GetAPIPrefix();
 class CreationService {
   private Creation_URL: string = API_PREFIX + '/api/creation';
 
-  public getCreationById = async (payload) => {
+  public getCreationByUserId = async (userId: number) => {
+    const url: string = this.Creation_URL + '/get/user';
+    const payload = {
+      user: {
+        id: userId,
+      },
+    };
+    try {
+      let response = await axios.post(url, payload);
+
+      return response.data;
+    } catch (err) {
+      return null;
+    }
+  };
+
+  public getCreationById = async (userId: number, creationId: number) => {
     const url: string = this.Creation_URL + '/get/creation';
 
-    try {
-      let response = await axios.get(url, payload);
-
-      return response.data;
-    } catch (err) {
-      return null;
-    }
-  };
-
-  public getCreationByUserId = async (payload) => {
-    const url: string = this.Creation_URL + '/get/user';
-
-    try {
-      let response = await axios.get(url, payload);
-
-      return response.data;
-    } catch (err) {
-      return null;
-    }
-  };
-
-  public getUserByCreationId = async (payload) => {
-    const url: string = this.Creation_URL + '/get-user';
-
-    try {
-      let response = await axios.get(url, payload);
-
-      return response.data;
-    } catch (err) {
-      return null;
-    }
-  };
-
-  // TODO: add type to the payload
-  public addCreation = async (payload) => {
-    const url: string = this.Creation_URL + '/add';
+    const payload = {
+      user: {
+        id: userId,
+      },
+      creation: {
+        id: creationId,
+      },
+    };
 
     try {
       let response = await axios.post(url, payload);
@@ -56,8 +45,48 @@ class CreationService {
     }
   };
 
-  // TODO: add type to the payload
-  public updateCreationInfo = async (payload) => {
+  public getUserByCreationId = async (userId: number, creationId: number) => {
+    const url: string = this.Creation_URL + '/get-user';
+
+    const payload = {
+      user: {
+        id: userId,
+      },
+      creation: {
+        id: creationId,
+      },
+    };
+
+    try {
+      let response = await axios.post(url, payload);
+
+      return response.data;
+    } catch (err) {
+      return null;
+    }
+  };
+
+  public addCreation = async (userId: number, creation: CreationInfo[]) => {
+    const url: string = this.Creation_URL + '/add';
+
+    const payload: CreationPayload = {
+      user: {
+        id: userId,
+      },
+      creations: creation,
+    };
+
+    try {
+      let response = await axios.post(url, payload);
+
+      return response.data;
+    } catch (err) {
+      return null;
+    }
+  };
+
+  // TODO: find the page to use this service
+  public updateCreationInfo = async (payload: CreationInfo) => {
     const url: string = this.Creation_URL + '/update';
 
     try {
@@ -74,9 +103,15 @@ class CreationService {
     }
   };
 
-  // TODO: add type to the payload
-  public deleteCreation = async (payload) => {
+  // TODO: find the page to use this service
+  public deleteCreation = async (creationId: number) => {
     const url: string = this.Creation_URL + '/delete';
+
+    const payload = {
+      creation: {
+        creationId: creationId,
+      },
+    };
 
     try {
       let response = await axios.put(url, payload);
@@ -92,3 +127,5 @@ class CreationService {
     }
   };
 }
+
+export default new CreationService();

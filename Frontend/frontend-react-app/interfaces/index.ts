@@ -74,3 +74,20 @@ export type ExperienceCardFullInfo = {
   visit: number;
   like: number;
 };
+
+export type CreationInfo = {
+  thumbnail: string;
+  name: string;
+  description: string;
+  active: number;
+  visit: number;
+  like: number;
+  ownerId: number;
+};
+
+export type CreationPayload = {
+  user: {
+    id: number;
+  };
+  creations: CreationInfo[];
+};

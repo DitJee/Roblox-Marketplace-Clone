@@ -19,7 +19,7 @@ const ExperienceCardFull = ({
   like,
 }: ExperienceCardFullInfo) => {
   return (
-    <div className="">
+    <div className="mb-5">
       <div className="grid grid-cols-2 bg-gray-100 ">
         <div className="flex items-center justify-center bg-gray-200 ">
           <Link className="m-5 relative h-40 w-40 cursor-pointer" to={''}>
@@ -35,28 +35,26 @@ const ExperienceCardFull = ({
         </div>
 
         <div className="flex flex-col items-start p-5">
-          <h1 className="text-3xl font-bold ml-5">{name + `'s Place`}</h1>
-          <div className="ml-5 relative flex py-2 items-center">
-            <div className="flex-grow border-t border-gray-800">
-              {description}
-            </div>
+          <div className="flex-grow border-b border-gray-800 ">
+            <h1 className="text-3xl font-bold ">{name + `'s Place`}</h1>
           </div>
+          <div className=" relative flex py-2 items-center">{description}</div>
 
           <h1 className="grid grid-cols-2  justify-between ">
             {[
               {
                 name: 'Active',
-                count: 0,
+                count: active,
               },
               {
                 name: 'Visits',
-                count: 1,
+                count: visit,
               },
             ].map((context, index) => {
               return (
-                <div className="flex flex-col items-center mx-6 ">
-                  <h1 className="text-1xl font-bold ml-5">{context.name}</h1>
-                  <h1 className="text-1xl font-bold ml-5">{context.count}</h1>
+                <div className="flex flex-col items-center mt-6 mx-10 ">
+                  <h1 className="text-1xl font-bold ">{context.name}</h1>
+                  <h1 className="text-1xl font-bold ">{context.count}</h1>
                 </div>
               );
             })}
