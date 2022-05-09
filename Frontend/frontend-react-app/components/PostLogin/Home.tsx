@@ -36,7 +36,7 @@ const Home = () => {
           <Routes>
             <Route path="profile/*" element={<Profile />}></Route>
             <Route
-              path="/"
+              path=""
               element={<Dashboard showSidebar={showSidebar} />}
             ></Route>
           </Routes>

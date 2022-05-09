@@ -4,7 +4,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Routes,
   Route,
   Link,
@@ -16,6 +16,7 @@ import SignupForm from '../components/PreLogin/SignupForm';
 import Login from '../components/PreLogin/Login';
 import Register from '../components/PreLogin/Register';
 import Home from '../components/PostLogin/Home';
+import Profile from '../components/PostLogin/Profile/Profile';
 
 export async function getStaticProps() {
   const exploreData = await fetch('https://links.papareact.com/pyp').then(
