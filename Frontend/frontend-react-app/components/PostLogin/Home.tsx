@@ -47,12 +47,4 @@ const Home = () => {
   );
 };
 
-// className="
-//                       sm:pl-40
-//                       md:pl-40
-//                       lg:pl-40
-//                       xl:pl-40
-//                       2xl:pl-40
-//                     "
-
 export default Home;
