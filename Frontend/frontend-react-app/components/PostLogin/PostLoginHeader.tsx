@@ -12,6 +12,12 @@ import {
 import Sidebar from './Sidebar';
 import { Link } from 'react-router-dom';
 
+import Wallet from '../Wallet';
+import {
+  WalletDisconnectButton,
+  WalletMultiButton,
+} from '@solana/wallet-adapter-react-ui';
+
 const PostLoginHeader = ({ isVisible, onClickSidebarToggle, showSidebar }) => {
   return (
     <div>
@@ -79,10 +85,10 @@ const PostLoginHeader = ({ isVisible, onClickSidebarToggle, showSidebar }) => {
           <GlobeAltIcon className="h-6 cursor-pointer" />
           <BellIcon className="h-6 cursor-pointer"></BellIcon>
           <CashIcon className="h-6 cursor-pointer"></CashIcon>
-
           <div className="flex items-center space-x-2 border-2 rounded-full p-2 cursor-pointer">
             <UserCircleIcon className="h-6 cursor-pointer" />
           </div>
+          <Wallet />
         </div>
       </header>
       {showSidebar && <Sidebar isVisible={isVisible} />}

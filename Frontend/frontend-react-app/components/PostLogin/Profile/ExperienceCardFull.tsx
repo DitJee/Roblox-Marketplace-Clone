@@ -52,7 +52,10 @@ const ExperienceCardFull = ({
               },
             ].map((context, index) => {
               return (
-                <div className="flex flex-col items-center mt-6 mx-10 ">
+                <div
+                  key={context.name}
+                  className="flex flex-col items-center mt-6 mx-10 "
+                >
                   <h1 className="text-1xl font-bold ">{context.name}</h1>
                   <h1 className="text-1xl font-bold ">{context.count}</h1>
                 </div>
