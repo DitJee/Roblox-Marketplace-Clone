@@ -80,13 +80,15 @@ const ProfileCardWithInfo = ({ user }) => {
             },
           ].map((info) => {
             return (
-              <h4
+              <div
                 key={info.context}
-                className="flex text-1xl font-normal leading-normal dark:text-gray-600 mt-4"
+                className="flex items-center text-center text-1xl font-normal leading-normal dark:text-gray-600 mt-4 mr-3"
               >
-                {smallContext(info.context)}
-                {info.count}
-              </h4>
+                <h4>{smallContext(info.context)}</h4>
+                <h4 className="flex items-center font-bold text-2xl font-normal leading-normal dark:text-gray-600  ml-2">
+                  {info.count}
+                </h4>
+              </div>
             );
           })}
         </div>

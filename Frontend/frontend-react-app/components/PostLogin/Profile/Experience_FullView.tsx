@@ -15,6 +15,7 @@ const Experience_FullView = ({}) => {
     <div className="mt-10">
       <div className="my-5">
         <ExperienceCardFull
+          key={userInfo.username}
           thumbnail={userInfo.picture}
           name={userInfo.username}
           description={userInfo.about}
@@ -24,6 +25,7 @@ const Experience_FullView = ({}) => {
         />
       </div>
       <ExperienceCardFull
+        key={userInfo.username}
         thumbnail={userInfo.picture}
         name={userInfo.username}
         description={userInfo.about}

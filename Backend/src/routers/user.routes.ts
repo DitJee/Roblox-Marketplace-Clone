@@ -38,7 +38,7 @@ userRouter.post(
   userController.handleFriendRequest
 );
 
-userRouter.get(
+userRouter.post(
   "/user/get-friends",
   [userPreCheck.checkIfUserExist],
   userController.getAllFriends
@@ -68,13 +68,13 @@ userRouter.delete(
   userController.unFollowUser
 );
 
-userRouter.get(
+userRouter.post(
   "/user/get-follower",
   [userPreCheck.checkIfUserExist],
   userController.getFollower
 );
 
-userRouter.get(
+userRouter.post(
   "/user/get-following",
   [userPreCheck.checkIfUserExist],
   userController.getFollowing

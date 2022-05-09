@@ -52,8 +52,9 @@ class UserService {
         id: userId,
       },
     };
+
     try {
-      const response = await axios.get(url, payload);
+      const response = await axios.post(url, payload);
       return response.data;
     } catch (err) {
       console.error(err);
@@ -61,10 +62,16 @@ class UserService {
     }
   };
 
-  public getFollower = async (payload) => {
+  public getFollower = async (userId: number) => {
     const url: string = this.USER_URL + '/get-follower';
+
+    const payload = {
+      user: {
+        id: userId,
+      },
+    };
     try {
-      const response = await axios.get(url, payload);
+      const response = await axios.post(url, payload);
       return response.data;
     } catch (err) {
       console.error(err);
@@ -72,10 +79,16 @@ class UserService {
     }
   };
 
-  public getFollowing = async (payload) => {
+  public getFollowing = async (userId: number) => {
     const url: string = this.USER_URL + '/get-following';
+
+    const payload = {
+      user: {
+        id: userId,
+      },
+    };
     try {
-      const response = await axios.get(url, payload);
+      const response = await axios.post(url, payload);
       return response.data;
     } catch (err) {
       console.error(err);
