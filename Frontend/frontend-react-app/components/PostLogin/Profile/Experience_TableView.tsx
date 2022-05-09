@@ -19,6 +19,7 @@ const Experience_TableView = ({ creationInfo }) => {
       {creationInfo.map((context, index) => {
         return (
           <ExperienceCardTable
+            key={context.name}
             thumbnail={context.thumbnail}
             name={context.name}
             description={context.description}

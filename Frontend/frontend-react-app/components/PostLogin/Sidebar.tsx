@@ -107,9 +107,12 @@ const Sidebar = ({ isVisible }) => {
         },
       ].map((context) => {
         return (
-          <div className="flex items-center justify-left mb-1 mt-2">
+          <div
+            key={context.name}
+            className="flex items-center justify-left mb-1 mt-2"
+          >
             {context.icon}
-            <a key={context.name} href={context.link}>
+            <a href={context.link}>
               <h5 className=" font-bold text-gray-600">{context.name}</h5>
             </a>
           </div>

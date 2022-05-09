@@ -18,7 +18,6 @@ const Home = () => {
 
   const onClickSidebarToggle = (e) => {
     setShowSidebar(!showSidebar);
-    console.log('toggle ', showSidebar);
   };
 
   return (
