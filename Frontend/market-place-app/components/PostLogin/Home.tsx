@@ -12,6 +12,7 @@ import PostLoginHeader from "./PostLoginHeader";
 import Footer from "./Footer";
 import TrackVisibility from "react-on-screen";
 import Profile from "./Profile/Profile";
+import Create from "./Create/Create";
 
 const Home = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -34,6 +35,7 @@ const Home = () => {
         <section className="pl-60">
           <Routes>
             <Route path="profile/*" element={<Profile />}></Route>
+            <Route path="create/:step_param" element={<Create />}></Route>
             <Route
               path=""
               element={<Dashboard showSidebar={showSidebar} />}

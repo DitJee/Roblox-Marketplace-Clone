@@ -1,11 +1,10 @@
-import React from 'react';
-import Image from 'next/image';
-import { UserLocalStorage } from '../../../interfaces';
-import { Link, useNavigate } from 'react-router-dom';
+import React from "react";
+import Image from "next/image";
+import { UserLocalStorage } from "../../../interfaces";
+import { Link, useNavigate } from "react-router-dom";
 
 const SmallProfileCard = ({}) => {
-  const user: UserLocalStorage = JSON.parse(localStorage.getItem('user'));
-  const navigate = useNavigate();
+  const user: UserLocalStorage = JSON.parse(localStorage.getItem("user"));
 
   return (
     <div className="mt-8 flex items-center justify-start">

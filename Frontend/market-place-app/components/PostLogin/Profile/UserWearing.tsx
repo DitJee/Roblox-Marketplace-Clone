@@ -1,48 +1,48 @@
-import React from 'react';
-import Image from 'next/image';
-import { User, UserInfo, UserLocalStorage } from '../../../interfaces';
-import Carousel from 'react-grid-carousel';
+import React from "react";
+import Image from "next/image";
+import { User, UserInfo, UserLocalStorage } from "../../../interfaces";
+import Carousel from "react-grid-carousel";
 
 const UserWearing = ({}) => {
-  const user: UserLocalStorage = JSON.parse(localStorage.getItem('user'));
+  const user: UserLocalStorage = JSON.parse(localStorage.getItem("user"));
 
   const userInfo: UserInfo = user.info;
 
   const wearingInfo: { name: string; imagePath: string; link: string }[] = [
     {
-      name: 'wearing_hair',
+      name: "wearing_hair",
       imagePath: userInfo.wearing_hair,
-      link: '',
+      link: "",
     },
     {
-      name: 'wearing_face',
+      name: "wearing_face",
       imagePath: userInfo.wearing_face,
-      link: '',
+      link: "",
     },
     {
-      name: 'wearing_top',
+      name: "wearing_top",
       imagePath: userInfo.wearing_top,
-      link: '',
+      link: "",
     },
     {
-      name: 'wearing_right_arm',
+      name: "wearing_right_arm",
       imagePath: userInfo.wearing_right_arm,
-      link: '',
+      link: "",
     },
     {
-      name: 'wearing_left_arm',
+      name: "wearing_left_arm",
       imagePath: userInfo.wearing_left_arm,
-      link: '',
+      link: "",
     },
     {
-      name: 'wearing_left_leg',
+      name: "wearing_left_leg",
       imagePath: userInfo.wearing_left_leg,
-      link: '',
+      link: "",
     },
     {
-      name: 'wearing_right_leg',
+      name: "wearing_right_leg",
       imagePath: userInfo.wearing_right_leg,
-      link: '',
+      link: "",
     },
   ];
 
@@ -66,7 +66,7 @@ const UserWearing = ({}) => {
           <Carousel cols={2} rows={2} gap={1} hideArrow={true} showDots={true}>
             {wearingInfo?.map((context, index) => {
               return (
-                <Carousel.Item>
+                <Carousel.Item key={context.name}>
                   <div
                     key={context.name}
                     className="relative h-32 w-32 mb-2 -mr-12"

@@ -1,13 +1,13 @@
-import React from 'react';
-import Image from 'next/image';
-import { UserInfo, UserLocalStorage } from '../../../interfaces';
-import ExperienceToggle from './ExperienceToggle';
-import { Route, Routes } from 'react-router-dom';
-import ExperienceCardFull from './ExperienceCardFull';
-import { CreationInfo } from '../../../interfaces/index';
+import React from "react";
+import Image from "next/image";
+import { UserInfo, UserLocalStorage } from "../../../interfaces";
+import ExperienceToggle from "./ExperienceToggle";
+
+import ExperienceCardFull from "./ExperienceCardFull";
+import { CreationInfo } from "../../../interfaces/index";
 
 const Experience_FullView = ({ creationInfo }) => {
-  const user: UserLocalStorage = JSON.parse(localStorage.getItem('user'));
+  const user: UserLocalStorage = JSON.parse(localStorage.getItem("user"));
   const userInfo: UserInfo = user.info;
 
   return (

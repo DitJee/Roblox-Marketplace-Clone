@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import {
   GlobeAltIcon,
   MenuIcon,
@@ -8,15 +8,15 @@ import {
   UserCircleIcon,
   CashIcon,
   BellIcon,
-} from '@heroicons/react/solid';
-import Sidebar from './Sidebar';
-import { Link } from 'react-router-dom';
+} from "@heroicons/react/solid";
+import Sidebar from "./Sidebar";
+import { Link } from "react-router-dom";
 
-import Wallet from '../Wallet';
+import Wallet from "../Wallet";
 import {
   WalletDisconnectButton,
   WalletMultiButton,
-} from '@solana/wallet-adapter-react-ui';
+} from "@solana/wallet-adapter-react-ui";
 
 const PostLoginHeader = ({ isVisible, onClickSidebarToggle, showSidebar }) => {
   return (
@@ -41,28 +41,27 @@ const PostLoginHeader = ({ isVisible, onClickSidebarToggle, showSidebar }) => {
 
           {[
             {
-              context: 'Discover',
-              link: '/discover',
+              context: "Discover",
+              link: "discover",
             },
             {
-              context: 'Shop',
-              link: '/avatar-shop',
+              context: "Shop",
+              link: "avatar-shop",
             },
             {
-              context: 'Create',
-              link: '/create',
+              context: "Create",
+              link: "create/0",
             },
             {
-              context: 'Robuck',
-              link: '/robuck',
+              context: "Robuck",
+              link: "robuck",
             },
           ].map((element) => (
-            <h1
-              key={element.context}
-              className=" flex text-1xl font-bold text-gray-700 leading-normal mt-0 cursor-pointer"
-            >
-              {element.context}
-            </h1>
+            <Link key={element.context} to={element.link}>
+              <h1 className=" flex text-1xl font-bold text-gray-700 leading-normal mt-0 cursor-pointer">
+                {element.context}
+              </h1>
+            </Link>
           ))}
         </div>
         {/* 
