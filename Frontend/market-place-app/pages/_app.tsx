@@ -1,27 +1,27 @@
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import {
   ConnectionProvider,
   WalletProvider,
-} from '@solana/wallet-adapter-react';
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
+} from "@solana/wallet-adapter-react";
+import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import {
   GlowWalletAdapter,
   PhantomWalletAdapter,
   SlopeWalletAdapter,
   SolflareWalletAdapter,
   TorusWalletAdapter,
-} from '@solana/wallet-adapter-wallets';
-import { clusterApiUrl } from '@solana/web3.js';
-import { AppProps } from 'next/app';
-import { FC, useMemo } from 'react';
+} from "@solana/wallet-adapter-wallets";
+import { clusterApiUrl } from "@solana/web3.js";
+import { AppProps } from "next/app";
+import { FC, useEffect, useMemo, useState } from "react";
 
-import '../styles/index.css';
-import '../styles/Home.module.css';
+import "../styles/index.css";
+
 // Use require instead of import since order matters
-require('@solana/wallet-adapter-react-ui/styles.css');
-require('../styles/globals.css');
+require("@solana/wallet-adapter-react-ui/styles.css");
+require("../styles/globals.css");
 
-const MyApp = ({ Component, pageProps }) => {
+const App = ({ Component, pageProps }) => {
   // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
   const network = WalletAdapterNetwork.Devnet;
 
@@ -42,15 +42,19 @@ const MyApp = ({ Component, pageProps }) => {
     [network]
   );
 
-  return (
-    <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider>
-          {typeof window === 'undefined' ? null : <Component {...pageProps} />}
-        </WalletModalProvider>
-      </WalletProvider>
-    </ConnectionProvider>
-  );
+  if (typeof window === "undefined") {
+    return <></>;
+  } else {
+    return (
+      <ConnectionProvider endpoint={endpoint}>
+        <WalletProvider wallets={wallets} autoConnect>
+          <WalletModalProvider>
+            <Component {...pageProps} />
+          </WalletModalProvider>
+        </WalletProvider>
+      </ConnectionProvider>
+    );
+  }
 };
 
-export default MyApp;
+export default App;

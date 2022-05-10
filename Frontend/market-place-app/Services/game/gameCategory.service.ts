@@ -1,15 +1,16 @@
 import axios from 'axios';
+import 'dotenv/config';
 import { GameInfo } from '../../interfaces';
 import APIHelper from '../API-helper';
 import authHeader from '../auth-header';
 const API_PREFIX: string = APIHelper.GetAPIPrefix();
 
-const AUTH_URL: string = '/api/games';
+const AUTH_URL: string = '/api/games/category';
 
-class GameService {
+class GameCategoryService {
   private API_URL: string = API_PREFIX + AUTH_URL;
 
-  getAllGames = async () => {
+  getAllGameCategories = async () => {
     const url: string = this.API_URL;
 
     try {
@@ -17,8 +18,8 @@ class GameService {
       let data = response.data;
       return data;
     } catch (err) {
-      return null;
+      throw new Error(err);
     }
   };
 }
-export default new GameService();
+export default new GameCategoryService();

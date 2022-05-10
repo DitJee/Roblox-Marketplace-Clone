@@ -1,66 +1,66 @@
-import React, { useState } from 'react';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { SignupInfo } from './interfaces';
-import AuthService from '../../Services/auth.service';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { SignupInfo } from "./interfaces";
+import AuthService from "../../Services/auth.service";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const validationSchema = () => {
   return Yup.object().shape({
     username: Yup.string()
       .test(
-        'len',
-        'The username must be between 3 and 20 characters.',
+        "len",
+        "The username must be between 3 and 20 characters.",
         (val: any) =>
           val && val.toString().length >= 3 && val.toString().length <= 20
       )
-      .required('This field is required!'),
+      .required("This field is required!"),
     email: Yup.string()
-      .email('This is not a valid email.')
-      .required('This field is required!'),
+      .email("This is not a valid email.")
+      .required("This field is required!"),
     password: Yup.string()
       .test(
-        'len',
-        'The password must be between 6 and 40 characters.',
+        "len",
+        "The password must be between 6 and 40 characters.",
         (val: any) =>
           val && val.toString().length >= 6 && val.toString().length <= 40
       )
-      .required('This field is required!'),
+      .required("This field is required!"),
   });
 };
 
 const SignupForm = (props) => {
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [bSuccessful, setbSuccessful] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   const successfulClassName: { bar: string; icon: string } = {
-    bar: 'bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md',
-    icon: 'fill-current h-6 w-6 text-teal-500 mr-4',
+    bar: "bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md",
+    icon: "fill-current h-6 w-6 text-teal-500 mr-4",
   };
   const unSuccessfulClassName: { bar: string; icon: string } = {
-    bar: 'bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-3 shadow-md',
-    icon: 'fill-current h-6 w-6 text-red-500 mr-4',
+    bar: "bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-3 shadow-md",
+    icon: "fill-current h-6 w-6 text-red-500 mr-4",
   };
 
   const initialValues: SignupInfo = {
-    username: '',
-    email: '',
-    password: '',
+    username: "",
+    email: "",
+    password: "",
   };
 
   const handleRegister = async (formValue: SignupInfo) => {
     const { username, email, password } = formValue;
 
-    setMessage('');
+    setMessage("");
     setbSuccessful(false);
 
     try {
       await AuthService.register(username, email, password);
-      navigate('/login');
+      navigate("/login");
       //window.location.reload();
     } catch (error) {
       console.log(error);
@@ -92,16 +92,16 @@ const SignupForm = (props) => {
             <Form>
               {[
                 {
-                  context: 'username',
-                  type: 'text',
+                  context: "username",
+                  type: "text",
                 },
                 {
-                  context: 'email',
-                  type: 'email',
+                  context: "email",
+                  type: "email",
                 },
                 {
-                  context: 'password',
-                  type: 'password',
+                  context: "password",
+                  type: "password",
                 },
               ].map((element) => (
                 <div key={element.context} className="form-group">
