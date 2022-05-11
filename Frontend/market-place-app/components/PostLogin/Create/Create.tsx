@@ -34,13 +34,14 @@ import { MetaplexOverlay } from "./MetaplexOverlay";
 import CategoryStep from "./Steps/CategoryStep";
 import StepComponent from "./StepComponent";
 import UploadStep from "./Steps/UploadStep";
+import InfoStep from "./Steps/InfoStep/InfoStep";
+import RoyaltiesStep from "./Steps/RoyaltiesStep/RoyaltiesStep";
 
 const {
   metadata: { Metadata },
 } = programs;
 
 const { Step } = Steps;
-const { Dragger } = Upload;
 const { Text } = Typography;
 
 const Create = () => {
@@ -80,10 +81,14 @@ const Create = () => {
   );
 
   useEffect(() => {
-    if (step_param) setStep(parseInt(step_param));
-    else gotoStep(0);
+    if (step_param) {
+      setStep(parseInt(step_param));
+    } else {
+      gotoStep(0);
+    }
 
-    console.log("attributes", attributes);
+    console.debug("attributes", attributes);
+    console.debug("files", files);
   }, [step_param, gotoStep]);
 
   const loadMetaData = async (
@@ -136,9 +141,25 @@ const Create = () => {
         break;
 
       case 2:
+        return (
+          <InfoStep
+            attributes={attributes}
+            files={files}
+            setAttributes={setAttributes}
+            confirm={() => gotoStep(3)}
+          />
+        );
+
         break;
 
       case 3:
+        return (
+          <RoyaltiesStep
+            attributes={attributes}
+            setAttributes={setAttributes}
+            confirm={() => gotoStep(4)}
+          />
+        );
         break;
 
       case 4:
@@ -169,7 +190,7 @@ const Create = () => {
   return (
     <div className=" grid grid-col-2 items-center  p-10 bg-gray-100">
       <StepComponent step={step} />
-      {stepComponent(step)}
+      {stepComponent(parseInt(step_param))}
     </div>
   );
 };

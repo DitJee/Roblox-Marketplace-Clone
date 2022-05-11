@@ -163,3 +163,31 @@ export interface IMetadataExtension {
     }[];
   };
 }
+
+export interface UserValue {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export type NFTInfo = {
+  title: string;
+  symbol: string;
+  description: string;
+  maxSupply: number;
+};
+
+export interface Royalty {
+  creatorKey: string;
+  amount: number;
+}
+
+export type RoyaltiesSplitInfo = {
+  creatorKey: string;
+  splitPercentage: number;
+};
+
+export type RoyaltiesInfo = {
+  royaltyPercentage: number;
+  royaltySplit: RoyaltiesSplitInfo[];
+};

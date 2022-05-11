@@ -1,4 +1,25 @@
 /** @type {import('next').NextConfig} */
+const withPlugins = require("next-compose-plugins");
+const withLess = require("next-with-less");
+
+const assetPrefix = process.env.ASSET_PREFIX || "";
+
+const plugins = [
+  [
+    withLess,
+    {
+      lessLoaderOptions: {
+        lessOptions: {
+          modifyVars: {
+            "@assetPrefix": assetPrefix || "''",
+          },
+          javascriptEnabled: true,
+        },
+      },
+    },
+  ],
+];
+
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -20,4 +41,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withPlugins(plugins, nextConfig);

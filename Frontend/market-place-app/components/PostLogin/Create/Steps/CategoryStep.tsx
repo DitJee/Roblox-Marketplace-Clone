@@ -47,7 +47,7 @@ const CategoryStep = (props: {
             type="button"
             className="text-gray-100 bg-purple-900 px-8 py-2 shadow-md    
             rounded-full font-bold my-2 hover:shadow-xl active:scale-90 
-            transition duration-150 mr-5"
+            transition duration-150 mr-5 cursor-pointer"
             onClick={() => props.confirm(element.category)}
           >
             {element.name}

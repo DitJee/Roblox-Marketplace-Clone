@@ -15,11 +15,12 @@ import { clusterApiUrl } from "@solana/web3.js";
 import { AppProps } from "next/app";
 import { FC, useEffect, useMemo, useState } from "react";
 
+import "../styles/index.less";
 import "../styles/index.css";
 
 // Use require instead of import since order matters
 require("@solana/wallet-adapter-react-ui/styles.css");
-require("../styles/globals.css");
+import "../styles/globals.css";
 
 const App = ({ Component, pageProps }) => {
   // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
@@ -47,7 +48,7 @@ const App = ({ Component, pageProps }) => {
   } else {
     return (
       <ConnectionProvider endpoint={endpoint}>
-        <WalletProvider wallets={wallets} autoConnect>
+        <WalletProvider wallets={wallets}>
           <WalletModalProvider>
             <Component {...pageProps} />
           </WalletModalProvider>
