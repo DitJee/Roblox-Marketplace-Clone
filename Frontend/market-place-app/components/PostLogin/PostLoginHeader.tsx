@@ -17,6 +17,7 @@ import {
   WalletDisconnectButton,
   WalletMultiButton,
 } from "@solana/wallet-adapter-react-ui";
+import AddCreatorModal from "./AddCreatorModal/AddCreatorModal";
 
 const PostLoginHeader = ({ isVisible, onClickSidebarToggle, showSidebar }) => {
   return (
@@ -87,6 +88,7 @@ const PostLoginHeader = ({ isVisible, onClickSidebarToggle, showSidebar }) => {
           <div className="flex items-center space-x-2 border-2 rounded-full p-2 cursor-pointer">
             <UserCircleIcon className="h-6 cursor-pointer" />
           </div>
+          <AddCreatorModal />
           <Wallet />
         </div>
       </header>

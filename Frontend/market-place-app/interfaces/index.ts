@@ -4,6 +4,8 @@
 //
 // import { User } from 'path/to/interfaces';
 
+import { PublicKey } from "@solana/web3.js";
+
 export type User = {
   id: number;
   name: string;
@@ -190,4 +192,20 @@ export type RoyaltiesSplitInfo = {
 export type RoyaltiesInfo = {
   royaltyPercentage: number;
   royaltySplit: RoyaltiesSplitInfo[];
+};
+
+export type StoreInfo = {
+  storeId: string;
+  txId: string;
+};
+
+export type SetWhitelistedCreatorParams = {
+  admin: PublicKey;
+  whitelistedCreatorPDA: PublicKey;
+  creator: PublicKey;
+  activated: boolean;
+};
+
+export declare type ParamsWithStore<P> = P & {
+  store: PublicKey;
 };

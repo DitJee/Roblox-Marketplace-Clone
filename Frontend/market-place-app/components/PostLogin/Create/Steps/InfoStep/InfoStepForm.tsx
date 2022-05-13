@@ -51,10 +51,10 @@ const InfoStepForm = ({ attributes, setAttributes, confirm }) => {
   const [message, setMessage] = useState("");
 
   const initialValues: NFTInfo = {
-    title: "",
-    symbol: "",
-    description: "",
-    maxSupply: 0,
+    title: "flowa",
+    symbol: "flowaflowa",
+    description: "flowaflowaflowa",
+    maxSupply: 1,
   };
 
   const handleGotoRoyalties = (formValue: NFTInfo) => {

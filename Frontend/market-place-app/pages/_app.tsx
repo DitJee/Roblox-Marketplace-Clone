@@ -1,6 +1,7 @@
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import {
   ConnectionProvider,
+  useWallet,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
@@ -11,9 +12,10 @@ import {
   SolflareWalletAdapter,
   TorusWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
-import { clusterApiUrl } from "@solana/web3.js";
+import { clusterApiUrl, PublicKey } from "@solana/web3.js";
 import { AppProps } from "next/app";
 import { FC, useEffect, useMemo, useState } from "react";
+import { actions, Connection } from "@metaplex/js";
 
 import "../styles/index.less";
 import "../styles/index.css";
@@ -48,7 +50,7 @@ const App = ({ Component, pageProps }) => {
   } else {
     return (
       <ConnectionProvider endpoint={endpoint}>
-        <WalletProvider wallets={wallets}>
+        <WalletProvider wallets={wallets} autoConnect={true}>
           <WalletModalProvider>
             <Component {...pageProps} />
           </WalletModalProvider>
