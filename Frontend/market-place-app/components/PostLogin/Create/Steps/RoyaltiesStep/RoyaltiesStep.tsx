@@ -10,6 +10,7 @@ import {
 import { shortenAddress } from "../../../../../utils/string";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import RoyaltiesSpiltter from "./RoyaltiesSpiltter";
 
 const validationSchema = () => {
   return Yup.object().shape({
@@ -54,16 +55,22 @@ const RoyaltiesStep = (props: {
   const handleGoToReview = (formValue: { royaltyPercentage: number }) => {
     // get royaltyPercentage and royaltySplit
     const { royaltyPercentage } = formValue;
+
+    // assign new seller_fee_basis_points
     props.setAttributes({
       ...props.attributes,
       seller_fee_basis_points: royaltyPercentage * 100,
     });
+
     // Find all royalties that are invalid (0)
     const zeroedRoyalties = royalties.filter((royalty) => royalty.amount === 0);
 
     if (zeroedRoyalties.length !== 0 || totalRoyaltyShares !== 100) {
       // Contains a share that is 0 or total shares does not equal 100, show errors.
       setIsShowErrors(true);
+      console.warn(
+        "Contains a share that is 0 or total shares does not equal 100, show errors."
+      );
       return;
     }
 
@@ -86,7 +93,9 @@ const RoyaltiesStep = (props: {
       ...props.attributes,
       creators: creatorStructs,
     });
-    props.confirm();
+
+    console.log("updated attributes => ", props.attributes);
+    //props.confirm();
   };
 
   useEffect(() => {
@@ -167,9 +176,33 @@ const RoyaltiesStep = (props: {
                   component="div"
                   className="mt-5 mb-5 flex items-center border dark:border-red-800 bg-gray-700  text-white text-sm font-bold px-4 py-3"
                 />
+                {/* 
+                  RoyaltiesSpiltter 
+                */}
+                {[...fixedCreators, ...creators].length > 0 && (
+                  <div>
+                    <label className="action-field" style={{ width: "100%" }}>
+                      <h1 className="text-2xl font-bold leading-normal text-black">
+                        Creators Split
+                      </h1>
+                      <p>
+                        This is how much of the proceeds from the initial sale
+                        and any royalties will be split out amongst the
+                        creators.
+                      </p>
+                      <RoyaltiesSpiltter
+                        creators={[...fixedCreators, ...creators]}
+                        royalties={royalties}
+                        setRoyalties={setRoyalties}
+                        isShowErrors={isShowErrors}
+                      />
+                    </label>
+                  </div>
+                )}
               </div>
             );
           })}
+
           <div className="form-group flex justify-center">
             <button
               type="submit"
