@@ -11,8 +11,10 @@ import { Account } from "@metaplex-foundation/mpl-core";
 import { WalletNotConnectedError } from "@solana/wallet-adapter-base";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Connection, programs } from "@metaplex/js";
-import { TransactionCtorFields } from "@solana/web3.js";
+import { TransactionCtorFields, Signer, Keypair } from "@solana/web3.js";
 import { toPublicKey } from "../../../utils/string";
+import { decode, encode } from "bs58";
+import * as anchor from "@project-serum/anchor";
 const {
   metaplex: { Store, AuctionManager, SetWhitelistedCreator },
   metadata: { Metadata },
@@ -80,10 +82,6 @@ const AddCreatorModal = ({}) => {
     }
   }, [publicKey, connection, storeInfo]);
 
-  useEffect(() => {
-    getCreators();
-  }, []);
-
   const [bSuccessful, setbSuccessful] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -91,7 +89,8 @@ const AddCreatorModal = ({}) => {
 
   const [modalAddress, setModalAddress] = useState<string>("");
 
-  const addCreatorToWhiteList = (walletAddress) => {
+  const addCreatorToWhiteList = async (_walletAddress) => {
+    const { walletAddress } = _walletAddress;
     console.log("walletAddress =>", walletAddress);
 
     const bIsDuplicatedAddress = (address) => address === walletAddress;
@@ -103,7 +102,7 @@ const AddCreatorModal = ({}) => {
       setModalAddress("");
       setMessage("The creator has already been added to the store");
     } else {
-      addWhitelistedCreator(walletAddress);
+      await addWhitelistedCreator(walletAddress);
 
       setModalAddress(walletAddress);
       setMessage("");
@@ -131,18 +130,38 @@ const AddCreatorModal = ({}) => {
       creator: toPublicKey(walletAddress),
       activated: true,
     };
+
+    // init white listed creator
     const whiteListedCreator = new SetWhitelistedCreator(options, params);
+
+    // get estimated fee
     const transcationFee = await whiteListedCreator.getEstimatedFee(connection);
-    console.log(
-      "transcationFee",
-      transcationFee,
-      "font-size: 36px; font-weight: bold"
-    );
+    console.log("transcationFee =>", transcationFee);
+
+    const signerKeyPair = Keypair.fromSeed(decode(walletAddress));
+
+    // sign the transaction
+    const _signer: Signer = {
+      publicKey: signerKeyPair.publicKey,
+      secretKey: signerKeyPair.secretKey,
+    };
+    console.log("_signer => ", _signer);
+
+    const transferAuthority: Keypair = Keypair.generate();
+    const signer: Signer = {
+      publicKey: transferAuthority.publicKey,
+      secretKey: transferAuthority.secretKey,
+    };
+    whiteListedCreator.sign(signer);
   };
 
   const initialValues: { walletAddress: string } = {
     walletAddress: "",
   };
+
+  useEffect(() => {
+    getCreators();
+  }, [showModal]);
 
   return (
     <div>

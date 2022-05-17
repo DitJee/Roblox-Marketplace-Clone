@@ -27,44 +27,44 @@ interface IInitStoreResponse {
 const Home = () => {
   const [showSidebar, setShowSidebar] = useState(false);
 
-  const { publicKey, signTransaction, signAllTransactions, connected } =
-    useWallet();
+  // const { publicKey, signTransaction, signAllTransactions, connected } =
+  //   useWallet();
 
-  const connection = new Connection("devnet");
-  const wallet: Wallet = {
-    publicKey: publicKey,
-    signTransaction: signTransaction,
-    signAllTransactions: signAllTransactions,
-  };
+  // const connection = new Connection("devnet");
+  // const wallet: Wallet = {
+  //   publicKey: publicKey,
+  //   signTransaction: signTransaction,
+  //   signAllTransactions: signAllTransactions,
+  // };
 
-  const initStore = useCallback(async () => {
-    if (!publicKey) throw new WalletNotConnectedError();
+  // const initStore = useCallback(async () => {
+  //   if (!publicKey) throw new WalletNotConnectedError();
 
-    try {
-      const InitStoreResponse = await actions.initStore({
-        connection,
-        wallet,
-      });
+  //   try {
+  //     const InitStoreResponse = await actions.initStore({
+  //       connection,
+  //       wallet,
+  //     });
 
-      console.log("storeIdz => ", InitStoreResponse);
+  //     console.log("storeIdz => ", InitStoreResponse);
 
-      localStorage.setItem("store", JSON.stringify(InitStoreResponse));
-    } catch (error) {
-      console.log("error => ", error);
-    }
-  }, [publicKey, connection, wallet]);
+  //     localStorage.setItem("store", JSON.stringify(InitStoreResponse));
+  //   } catch (error) {
+  //     console.log("error => ", error);
+  //   }
+  // }, [publicKey, connection, wallet]);
 
-  useEffect(() => {
-    initStore();
-  }, []);
+  // useEffect(() => {
+  //   initStore();
+  // }, []);
+
+  // const [storeId, setStoreId] = useState();
+
+  // const { connection } = useConnection();
 
   const onClickSidebarToggle = (e) => {
     setShowSidebar(!showSidebar);
   };
-
-  const [storeId, setStoreId] = useState();
-
-  // const { connection } = useConnection();
 
   return (
     <div className=" flex flex-col h-screen justify-between">
