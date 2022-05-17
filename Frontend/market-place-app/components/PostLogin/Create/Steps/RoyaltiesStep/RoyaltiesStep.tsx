@@ -52,7 +52,9 @@ const RoyaltiesStep = (props: {
     royaltyPercentage: 0,
   };
 
-  const handleGoToReview = (formValue: { royaltyPercentage: number }) => {
+  const handleGoToReview = (formValue) => {
+    console.log(formValue);
+    return;
     // get royaltyPercentage and royaltySplit
     const { royaltyPercentage } = formValue;
 
@@ -149,7 +151,7 @@ const RoyaltiesStep = (props: {
             {
               context: "Royalty Percentage",
               name: "royaltyPercentage",
-              type: "text",
+              type: "number",
               placeholder: "Between 0 and 100",
             },
           ].map((element, index) => {
@@ -169,7 +171,7 @@ const RoyaltiesStep = (props: {
                   name={element.name}
                   type={element.type}
                   placeholder={element.placeholder}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-200 dark:text-white mb-4 form-control"
+                  className="inputRow"
                 />
                 <ErrorMessage
                   name={element.name}

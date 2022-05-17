@@ -10,6 +10,7 @@ import {
 import { shortenAddress } from "../../../../../utils/string";
 import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
+import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/solid";
 
 const validationSchema = () => {
   return Yup.object().shape({
@@ -21,7 +22,7 @@ const validationSchema = () => {
           (val: any) =>
             val && val.toString().length >= 0 && val.toString().length <= 45
         ),
-        royaltySplitPercentage: Yup.number()
+        splitPercentage: Yup.number()
           .min(0, "The percentage must be more than 0%")
           .max(100, "The percentage must be less than 100%")
           .required("Royalty split percentage is required"),
@@ -44,18 +45,18 @@ const RoyaltiesSpiltter = (props: {
     royalties: [
       {
         creatorWalletAddress: shortenAddress(publicKey.toBase58()),
-        splitPercentage: 0,
+        splitPercentage: 100,
       },
     ],
   };
 
   return (
-    <div>
+    <div className="mt-5">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values) => {
-          alert(JSON.stringify(values, null, 2));
+          console.log(values);
         }}
       >
         {({ values }) => (
@@ -63,19 +64,36 @@ const RoyaltiesSpiltter = (props: {
             <FieldArray name="royalties">
               {({ insert, remove, push }) => (
                 <div>
+                  <div className="flex items-center justify-start mb-5 ">
+                    <button
+                      type="button"
+                      className=""
+                      onClick={() =>
+                        push({ creatorWalletAddress: "", splitPercentage: "" })
+                      }
+                    >
+                      <PlusCircleIcon className="h-8" />
+                    </button>
+                    <label className="ml-3 font-semibold">Add Creator</label>
+                  </div>
+
                   {values.royalties.length > 0 &&
                     values.royalties.map((friend, index) => (
-                      <div className="row" key={index}>
-                        <div className="col">
+                      <div
+                        className="flex items-center justify-between"
+                        key={index}
+                      >
+                        <div className="flex">
                           <label
                             htmlFor={`royalties.${index}.creatorWalletAddress`}
+                            className="font-semibold"
                           >
                             Wallet Address
                           </label>
                           <Field
                             name={`royalties.${index}.creatorWalletAddress`}
-                            placeholder="Jane Doe"
                             type="text"
+                            className="inputRow"
                           />
                           <ErrorMessage
                             name={`royalties.${index}.creatorWalletAddress`}
@@ -83,46 +101,44 @@ const RoyaltiesSpiltter = (props: {
                             className="field-error"
                           />
                         </div>
-                        <div className="col">
-                          <label htmlFor={`royalties.${index}.email`}>
-                            Email
+                        <div className="flex">
+                          <label
+                            htmlFor={`royalties.${index}.splitPercentage`}
+                            className="font-semibold"
+                          >
+                            Split Percentage
                           </label>
                           <Field
-                            name={`royalties.${index}.email`}
-                            placeholder="jane@acme.com"
-                            type="email"
+                            name={`royalties.${index}.splitPercentage`}
+                            type="number"
+                            className="inputRow"
                           />
                           <ErrorMessage
-                            name={`royalties.${index}.name`}
+                            name={`royalties.${index}.splitPercentage`}
                             component="div"
                             className="field-error"
                           />
                         </div>
-                        <div className="col">
+                        <div className="mb-2">
                           <button
                             type="button"
-                            className="secondary"
-                            onClick={() => remove(index)}
+                            onClick={() => {
+                              console.log("index => ", index);
+                              remove(index);
+                            }}
                           >
-                            X
+                            <MinusCircleIcon className="h-8" />
                           </button>
                         </div>
                       </div>
                     ))}
-                  <button
-                    type="button"
-                    className="secondary"
-                    onClick={() => push({ name: "", email: "" })}
-                  >
-                    Add Friend
-                  </button>
                 </div>
               )}
             </FieldArray>
-            <button type="submit">Invite</button>
           </Form>
         )}
       </Formik>
+      <button type="submit">asdd</button>
     </div>
   );
 };

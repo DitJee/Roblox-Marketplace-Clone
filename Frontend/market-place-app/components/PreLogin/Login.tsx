@@ -1,47 +1,47 @@
-import React from 'react';
-import { useState } from 'react';
-import Image from 'next/image';
+import React from "react";
+import { useState } from "react";
+import Image from "next/image";
 import {
   GlobeAltIcon,
   MenuIcon,
   SearchIcon,
   UserCircleIcon,
-} from '@heroicons/react/solid';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { LoginInfo } from './interfaces';
-import AuthService from '../../Services/auth.service';
-import { Link, useNavigate } from 'react-router-dom';
+} from "@heroicons/react/solid";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { LoginInfo } from "./interfaces";
+import AuthService from "../../Services/auth.service";
+import { Link, useNavigate } from "react-router-dom";
 
 const validationSchema = () => {
   return Yup.object().shape({
-    username: Yup.string().required('Username is required'),
-    password: Yup.string().required('Password is required'),
+    username: Yup.string().required("Username is required"),
+    password: Yup.string().required("Password is required"),
   });
 };
 
 const Login = (props) => {
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, bSetLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   const initialValues: LoginInfo = {
-    username: '',
-    password: '',
+    username: "",
+    password: "",
   };
 
   const handleLogin = async (formValue: LoginInfo) => {
     const { username, password } = formValue;
 
-    setMessage('');
+    setMessage("");
     bSetLoading(true);
 
     try {
       await AuthService.login(username, password);
-      navigate('/home');
+      navigate("/home");
       //window.location.reload();
     } catch (error) {
       const resMessage: string =
@@ -72,12 +72,12 @@ const Login = (props) => {
             <Form>
               {[
                 {
-                  context: 'username',
-                  type: 'text',
+                  context: "username",
+                  type: "text",
                 },
                 {
-                  context: 'password',
-                  type: 'password',
+                  context: "password",
+                  type: "password",
                 },
               ].map((element) => (
                 <div key={element.context} className="form-group">
@@ -90,7 +90,7 @@ const Login = (props) => {
                   <Field
                     name={element.context}
                     type={element.type}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white mb-4"
+                    className="inputRow"
                   />
                   <ErrorMessage
                     name={element.context}
