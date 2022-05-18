@@ -49,30 +49,39 @@ type RoyaltiesForm = {
 const RoyaltiesSpiltter = (props: {
   fixedCreators: Array<UserValue>;
   creators: Array<UserValue>;
-  setCreators: Function;
-  royalties: Array<Royalty>;
-  setRoyalties: Function;
+  royalties: React.MutableRefObject<Royalty[]>;
   isShowErrors?: boolean;
   attributes: IMetadataExtension;
   setAttributes: (attr: IMetadataExtension) => void;
   handleGoToReview: Function;
-  totalRoyaltyShares: number;
+  errorTotalPercentage: number;
 }) => {
   const { publicKey, connected } = useWallet();
 
   const [bSuccessful, setbSuccessful] = useState(false);
   const [message, setMessage] = useState("");
 
-  const initialValues: {
+  var initialValues: {
     royalties: { creatorWalletAddress: string; splitPercentage: number }[];
   } = {
     royalties: [
       {
-        creatorWalletAddress: publicKey.toBase58(),
+        creatorWalletAddress: "",
         splitPercentage: 100,
       },
     ],
   };
+
+  if (publicKey) {
+    initialValues = {
+      royalties: [
+        {
+          creatorWalletAddress: publicKey.toBase58(),
+          splitPercentage: 100,
+        },
+      ],
+    };
+  }
 
   const onRoyaltyPercentageChange = (e) => {
     let _percentage: number = 0;
@@ -124,21 +133,25 @@ const RoyaltiesSpiltter = (props: {
 
     console.log("newCreators => ", newCreators);
     if (newCreators.length !== 0) {
-      await props.setCreators([...props.creators, ...newCreators]);
+      props.creators.push(...newCreators);
     }
 
     console.log("props.creators after => ", props.creators);
   };
 
   const handleChangeSplit = async (value) => {
-    await props.setRoyalties(
-      props.royalties.map((_royalty, index) => {
-        return {
-          ..._royalty,
-          amount: value.royalties[index].splitPercentage,
-        };
-      })
-    );
+    const _royalties = [];
+    value.royalties.forEach((_royalty, index) => {
+      _royalties.push({
+        creatorKey: _royalty.creatorWalletAddress,
+        amount: _royalty.splitPercentage,
+      });
+    });
+
+    props.royalties.current = [];
+    props.royalties.current.push(..._royalties);
+
+    console.log("props.royalties => ", props.royalties);
   };
 
   return (
@@ -185,7 +198,7 @@ const RoyaltiesSpiltter = (props: {
                   </div>
 
                   {values.royalties.length > 0 &&
-                    values.royalties.map((friend, index) => (
+                    values.royalties.map((royalty, index) => (
                       <div
                         className="flex items-center justify-between"
                         key={index}
@@ -294,7 +307,7 @@ const RoyaltiesSpiltter = (props: {
           </Form>
         )}
       </Formik>
-      {props.isShowErrors && props.totalRoyaltyShares !== 100 && (
+      {props.isShowErrors && props.errorTotalPercentage !== 100 && (
         <div className={unSuccessfulClassName.bar} role="alert">
           <div className="flex">
             <div className="py-1">
@@ -314,7 +327,7 @@ const RoyaltiesSpiltter = (props: {
               <div className="font-normal">{}</div>
               <div className="text-sm py-1 items-center">
                 The split percentages for each creator must add up to 100%.
-                Current total split percentage is {props.totalRoyaltyShares}%.
+                Current total split percentage is {props.errorTotalPercentage}%.
               </div>
               <div className="text-sm py-1 items-center">Or</div>
               <div className="text-sm py-1 items-center">

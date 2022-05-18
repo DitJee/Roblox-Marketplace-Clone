@@ -1,5 +1,5 @@
 import { useWallet } from "@solana/wallet-adapter-react";
-import React, { FC, FormEvent, useEffect, useState } from "react";
+import React, { FC, FormEvent, useEffect, useRef, useState } from "react";
 import {
   Creator,
   IMetadataExtension,
@@ -17,20 +17,39 @@ const RoyaltiesStep = (props: {
 }) => {
   // const file = props.attributes.image;
   const { publicKey, connected } = useWallet();
-  const [creators, setCreators] = useState<Array<UserValue>>([]);
-  const [fixedCreators, setFixedCreators] = useState<Array<UserValue>>([]);
-  const [royalties, setRoyalties] = useState<Array<Royalty>>([]);
-  const [totalRoyaltyShares, setTotalRoyaltiesShare] = useState<number>(0);
+  const creators = useRef<Array<UserValue>>([]);
+  const fixedCreators = useRef<Array<UserValue>>([]);
+  const royalties = useRef<Array<Royalty>>([]);
+  const totalRoyaltyShares = useRef<number>(0);
   const [showCreatorsModal, setShowCreatorsModal] = useState<boolean>(false);
   const [isShowErrors, setIsShowErrors] = useState<boolean>(false);
+  const [errorTotalPercentage, setErrorTotalPercentage] = useState<number>(0);
+
+  const updateTotalRoyaltyShares = () => {
+    // When royalties changes, sum up all the amounts.
+    const total = royalties.current.reduce((totalShares, royalty) => {
+      return totalShares + royalty.amount;
+    }, 0);
+
+    console.log("-------------- total -------------- ", total);
+
+    setErrorTotalPercentage(total);
+
+    totalRoyaltyShares.current = total;
+    console.log("totalRoyaltyShares => ", totalRoyaltyShares.current);
+  };
 
   const handleGoToReview = (formValue) => {
     console.log("royalties => ", royalties);
 
-    // Find all royalties that are invalid (0)
-    const zeroedRoyalties = royalties.filter((royalty) => royalty.amount === 0);
+    updateTotalRoyaltyShares();
 
-    if (zeroedRoyalties.length !== 0 || totalRoyaltyShares !== 100) {
+    // Find all royalties that are invalid (0)
+    const zeroedRoyalties = royalties.current.filter(
+      (royalty) => royalty.amount === 0
+    );
+
+    if (zeroedRoyalties.length !== 0 || totalRoyaltyShares.current !== 100) {
       // Contains a share that is 0 or total shares does not equal 100, show errors.
       setIsShowErrors(true);
       console.warn(
@@ -40,15 +59,19 @@ const RoyaltiesStep = (props: {
     }
 
     console.log("[...fixedCreators, ...creators]", [
-      ...fixedCreators,
-      ...creators,
+      ...fixedCreators.current,
+      ...creators.current,
     ]);
-    const creatorStructs: Creator[] = [...fixedCreators, ...creators].map(
+    const creatorStructs: Creator[] = [
+      ...fixedCreators.current,
+      ...creators.current,
+    ].map(
       (c) =>
         new Creator({
           address: c.value,
           verified: c.value === publicKey?.toBase58(),
-          share: royalties.find((r) => r.creatorKey === c.value)?.amount,
+          share: royalties.current.find((r) => r.creatorKey === c.value)
+            ?.amount,
         })
     );
 
@@ -64,41 +87,23 @@ const RoyaltiesStep = (props: {
     });
 
     console.log("updated attributes => ", props.attributes);
-    //props.confirm();
+    props.confirm();
   };
 
   useEffect(() => {
     if (publicKey) {
       const key = publicKey.toBase58();
-      setFixedCreators([
+      fixedCreators.current = [
         {
           key,
           label: shortenAddress(key),
           value: key,
         },
-      ]);
+      ];
     }
-  }, [connected, setCreators]);
+  }, [connected, publicKey]);
 
-  useEffect(() => {
-    setRoyalties(
-      [...fixedCreators, ...creators].map((creator) => ({
-        creatorKey: creator.key,
-        amount: Math.trunc(100 / [...fixedCreators, ...creators].length),
-      }))
-    );
-  }, [creators, fixedCreators]);
-
-  useEffect(() => {
-    // When royalties changes, sum up all the amounts.
-    const total = royalties.reduce((totalShares, royalty) => {
-      return totalShares + royalty.amount;
-    }, 0);
-
-    console.log("-------------- total -------------- ", total);
-
-    setTotalRoyaltiesShare(total);
-  }, [royalties]);
+  useEffect(() => {}, [royalties.current]);
 
   return (
     <div className="  bg-white  shadow-md sm:p-6 lg:p-8 dark:bg-gray-200 ">
@@ -114,7 +119,7 @@ const RoyaltiesStep = (props: {
         {/* 
           Royalties Form
         */}
-        {[...fixedCreators, ...creators].length > 0 && (
+        {[...fixedCreators.current, ...creators.current].length > 0 && (
           <div>
             <label className="action-field" style={{ width: "100%" }}>
               <h1 className="text-2xl font-bold leading-normal text-black">
@@ -125,16 +130,14 @@ const RoyaltiesStep = (props: {
                 royalties will be split out amongst the creators.
               </p>
               <RoyaltiesSpiltter
-                fixedCreators={fixedCreators}
-                creators={creators}
-                setCreators={setCreators}
+                fixedCreators={fixedCreators.current}
+                creators={creators.current}
                 royalties={royalties}
-                setRoyalties={setRoyalties}
                 isShowErrors={isShowErrors}
                 attributes={props.attributes}
                 setAttributes={props.setAttributes}
                 handleGoToReview={handleGoToReview}
-                totalRoyaltyShares={totalRoyaltyShares}
+                errorTotalPercentage={errorTotalPercentage}
               />
             </label>
           </div>
