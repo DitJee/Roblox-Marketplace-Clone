@@ -5,7 +5,7 @@ import {
   Royalty,
   UserValue,
 } from "../../../../../interfaces";
-// import { ArtCard } from "../../../ArtCard";
+
 import ArtCard from "../../../../View/ArtCard";
 import InfoStepForm from "./InfoStepForm";
 
@@ -65,9 +65,6 @@ const InfoStep: FC = (props: {
     props.attributes
   );
 
-  const onLeftButtonClicked = () => console.log("onLeftButtonClicked");
-  const onRightButtonClicked = () => console.log("onRightButtonClicked");
-
   useEffect(() => {
     setRoyalties(
       creators.map((creator) => ({
@@ -78,7 +75,7 @@ const InfoStep: FC = (props: {
   }, [creators]);
 
   return (
-    <div className="grid grid-cols-2 p-5 rounded-xl">
+    <div className="grid grid-cols-2 content-center items-center p-5 rounded-xl ">
       <ArtCard
         uri={image}
         onLeftButtonClicked={undefined}

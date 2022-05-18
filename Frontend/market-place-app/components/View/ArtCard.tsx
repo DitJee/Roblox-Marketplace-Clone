@@ -10,8 +10,8 @@ const ArtCard = ({ uri, onLeftButtonClicked, onRightButtonClicked }) => {
     console.log("uri", uri);
   }, []);
   return (
-    <div className="flex flex-col p-5 bg-gray-200  ">
-      <div className="flex justify-between">
+    <div className="flex flex-col place-items-center grow items-center content-center p-5 bg-gray-200 h-full ">
+      {/* <div className="flex justify-between">
         <button
           type="button"
           className="rounded-full   text-center text-gray-900 "
@@ -26,12 +26,12 @@ const ArtCard = ({ uri, onLeftButtonClicked, onRightButtonClicked }) => {
         >
           <DotsHorizontalIcon className="h-6"></DotsHorizontalIcon>
         </button>
-      </div>
+      </div> */}
 
-      <div className="col-span-full mt-5 text-center">
-        <div className="relative ">
+      <div className="flex place-items-center items-center ">
+        <div className=" ">
           <img
-            className="rounded-lg"
+            className="rounded-lg align-middle content-center"
             src={cachedBlob}
             alt="https://picsum.photos/id/1/200/300"
             placeholder="blur"

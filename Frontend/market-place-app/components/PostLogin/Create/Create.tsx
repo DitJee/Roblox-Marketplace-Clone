@@ -1,20 +1,4 @@
 import React, { useEffect, useState, useCallback } from "react";
-import {
-  Steps,
-  Row,
-  Button,
-  Upload,
-  Col,
-  Input,
-  Statistic,
-  Slider,
-  Progress,
-  Spin,
-  InputNumber,
-  Form,
-  Typography,
-  Space,
-} from "antd";
 
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { MintLayout } from "@solana/spl-token";
@@ -36,13 +20,11 @@ import StepComponent from "./StepComponent";
 import UploadStep from "./Steps/UploadStep";
 import InfoStep from "./Steps/InfoStep/InfoStep";
 import RoyaltiesStep from "./Steps/RoyaltiesStep/RoyaltiesStep";
+import LaunchStep from "./Steps/LaunchStep/LaunchStep";
 
 const {
   metadata: { Metadata },
 } = programs;
-
-const { Step } = Steps;
-const { Text } = Typography;
 
 const Create = () => {
   const connection = new Connection("devnet");
@@ -163,6 +145,14 @@ const Create = () => {
         break;
 
       case 4:
+        return (
+          <LaunchStep
+            attributes={attributes}
+            files={files}
+            confirm={() => gotoStep(5)}
+            connection={connection}
+          />
+        );
         break;
 
       case 5:
