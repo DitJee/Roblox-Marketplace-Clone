@@ -4,8 +4,9 @@
 //
 // import { User } from 'path/to/interfaces';
 
+import { Wallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
-
+import { Connection } from "@metaplex/js";
 export type User = {
   id: number;
   name: string;

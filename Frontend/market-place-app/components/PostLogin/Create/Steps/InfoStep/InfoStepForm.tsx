@@ -70,7 +70,10 @@ const InfoStepForm = ({ attributes, setAttributes, confirm }) => {
         name: title,
         symbol: symbol,
         description: description,
-        maxSupply: maxSupply,
+        properties: {
+          ...attributes.properties,
+          maxSupply: maxSupply,
+        },
       });
 
       confirm();

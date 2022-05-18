@@ -10,8 +10,9 @@ import {
   IMetadataExtension,
   MetaData,
   MetadataCategory,
+  StringPublicKey,
 } from "../../../interfaces";
-import { Connection, programs } from "@metaplex/js";
+import { Connection, programs, actions, Wallet } from "@metaplex/js";
 import { PublicKey } from "@solana/web3.js";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
 import { MetaplexOverlay } from "./MetaplexOverlay";
@@ -21,6 +22,9 @@ import UploadStep from "./Steps/UploadStep";
 import InfoStep from "./Steps/InfoStep/InfoStep";
 import RoyaltiesStep from "./Steps/RoyaltiesStep/RoyaltiesStep";
 import LaunchStep from "./Steps/LaunchStep/LaunchStep";
+import { MintNFTParams, MintNFTResponse } from "@metaplex/js/lib/actions";
+import useArtworkFiles from "../../../Hooks/Create/useArtworkFiles";
+import WaitingStep from "./Steps/WaitingStep/WaitingStep";
 
 const {
   metadata: { Metadata },
@@ -28,7 +32,8 @@ const {
 
 const Create = () => {
   const connection = new Connection("devnet");
-  const { publicKey, sendTransaction, wallets } = useWallet();
+  const { publicKey, sendTransaction, signAllTransactions, signTransaction } =
+    useWallet();
   const [alertMessage, setAlertMessage] = useState<string>();
   const { step_param } = useParams();
   const navigate = useNavigate();
@@ -36,6 +41,9 @@ const Create = () => {
   const [stepsVisible, setStepsVisible] = useState<boolean>(true);
 
   const [step, setStep] = useState<number>(0);
+
+  const [isMinting, setMinting] = useState<boolean>(false);
+  const [nft, setNft] = useState<MintNFTResponse | undefined>(undefined);
 
   const [files, setFiles] = useState<File[]>([]);
   const [attributes, setAttributes] = useState<IMetadataExtension>({
@@ -50,9 +58,43 @@ const Create = () => {
     creators: [],
     properties: {
       files: [],
+      maxSupply: 0,
       category: MetadataCategory.Image,
     },
   });
+
+  const { image, animation_url } = useArtworkFiles(files, attributes);
+
+  // store files
+  const mint = async () => {
+    setStepsVisible(false);
+    setMinting(true);
+
+    try {
+      const _wallet: Wallet = {
+        publicKey: publicKey,
+        signTransaction: signTransaction,
+        signAllTransactions: signAllTransactions,
+      };
+      const mintParams: MintNFTParams = {
+        connection: connection,
+        wallet: _wallet,
+        uri: JSON.stringify(attributes),
+        maxSupply: attributes.properties.maxSupply,
+      };
+      const _nft: MintNFTResponse = await actions.mintNFT(mintParams);
+
+      if (_nft) setNft(_nft);
+
+      console.log(" _nft => ", _nft);
+    } catch (e: any) {
+      setAlertMessage(e.message);
+      console.error(e);
+      console.log(" e.message => ", e.message);
+    } finally {
+      setMinting(false);
+    }
+  };
 
   const gotoStep = useCallback(
     (_step: number) => {
@@ -72,24 +114,6 @@ const Create = () => {
     console.debug("attributes", attributes);
     console.debug("files", files);
   }, [step_param, gotoStep]);
-
-  const loadMetaData = async (
-    connection: Connection,
-    tokenPublicKey: string
-  ) => {
-    try {
-      const NFT_MINT_ADDRESS = new PublicKey(tokenPublicKey);
-      //I'm searching for this: C79iLmxdRoyVfKcaKU7YBppECTtqhSH8erXYPzxxhsH8
-
-      const pda = await Metadata.getPDA(NFT_MINT_ADDRESS);
-      console.log("pda", pda.toBase58());
-
-      const ownedMetadata = await Metadata.load(connection, pda);
-      console.log(ownedMetadata);
-    } catch (err) {
-      console.log("Failed to fetch metadata", err);
-    }
-  };
 
   const stepComponent = (_step: number) => {
     switch (_step) {
@@ -156,6 +180,13 @@ const Create = () => {
         break;
 
       case 5:
+        return (
+          <WaitingStep
+            mint={mint}
+            minting={isMinting}
+            confirm={() => gotoStep(6)}
+          />
+        );
         break;
 
       default:

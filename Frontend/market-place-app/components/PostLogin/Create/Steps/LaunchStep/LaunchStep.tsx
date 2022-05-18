@@ -102,7 +102,7 @@ const LaunchStep = (props: {
               </h1>
               <div className="flex items-center">
                 <h1 className="text-2xl font-extrabold leading-normal mt-0 mb-2 text-gray-100 border-4 p-5 rounded-xl bg-gray-800">
-                  {`${cost.toFixed(5)} sol (${priceUSD.toFixed(3)} $)`}
+                  {`${cost.toFixed(5)} sol (${priceUSD?.toFixed(3)} $)`}
                 </h1>
               </div>
             </div>
