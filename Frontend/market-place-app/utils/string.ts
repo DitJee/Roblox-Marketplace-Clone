@@ -34,8 +34,13 @@ export const toPublicKey = (key: string | PublicKey) => {
 
   let result = PubKeysInternedMap.get(key);
   if (!result) {
-    result = new PublicKey(key);
-    PubKeysInternedMap.set(key, result);
+    try {
+      result = new PublicKey(key);
+      PubKeysInternedMap.set(key, result);
+    } catch (error) {
+      console.warn(toPublicKey.name, " ", error);
+      return result;
+    }
   }
 
   return result;

@@ -7,10 +7,11 @@ import {
   Royalty,
   UserValue,
 } from "../../../../../interfaces";
-import { shortenAddress } from "../../../../../utils/string";
+import { shortenAddress, toPublicKey } from "../../../../../utils/string";
 import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/solid";
+import { PublicKey } from "@solana/web3.js";
 
 const successfulClassName: { bar: string; icon: string } = {
   bar: "bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md",
@@ -40,13 +41,22 @@ const validationSchema = () => {
   });
 };
 
+type RoyaltiesForm = {
+  creatorWalletAddress: string;
+  splitPercentage: number;
+};
+
 const RoyaltiesSpiltter = (props: {
+  fixedCreators: Array<UserValue>;
   creators: Array<UserValue>;
+  setCreators: Function;
   royalties: Array<Royalty>;
   setRoyalties: Function;
   isShowErrors?: boolean;
   attributes: IMetadataExtension;
   setAttributes: (attr: IMetadataExtension) => void;
+  handleGoToReview: Function;
+  totalRoyaltyShares: number;
 }) => {
   const { publicKey, connected } = useWallet();
 
@@ -58,7 +68,7 @@ const RoyaltiesSpiltter = (props: {
   } = {
     royalties: [
       {
-        creatorWalletAddress: shortenAddress(publicKey.toBase58()),
+        creatorWalletAddress: publicKey.toBase58(),
         splitPercentage: 100,
       },
     ],
@@ -81,13 +91,65 @@ const RoyaltiesSpiltter = (props: {
     });
   };
 
+  // TODO: this function 'addCreators' is temporary. The creator should be fetched using getWhiteListedCreators and selected from the drop down.
+
+  const addCreator = async (value) => {
+    console.log("props.creators before => ", props.creators);
+    const newCreators = [];
+    value.royalties.forEach((royalty, index) => {
+      const key = royalty.creatorWalletAddress;
+      // key validity check
+      if (toPublicKey(key) === undefined) {
+        console.warn(" the input key is invalid");
+        return;
+      }
+
+      console.log(key);
+      // duplicate check
+      const _index: number = props.fixedCreators.findIndex((fixedCreator) => {
+        return fixedCreator.key === key;
+      });
+      const _fixedIndex: number = props.creators.findIndex((creator) => {
+        return creator.key === key;
+      });
+
+      if (_index < 0 && _fixedIndex < 0) {
+        newCreators.push({
+          key: key,
+          label: shortenAddress(key),
+          value: key,
+        });
+      }
+    });
+
+    console.log("newCreators => ", newCreators);
+    if (newCreators.length !== 0) {
+      await props.setCreators([...props.creators, ...newCreators]);
+    }
+
+    console.log("props.creators after => ", props.creators);
+  };
+
+  const handleChangeSplit = async (value) => {
+    await props.setRoyalties(
+      props.royalties.map((_royalty, index) => {
+        return {
+          ..._royalty,
+          amount: value.royalties[index].splitPercentage,
+        };
+      })
+    );
+  };
+
   return (
     <div className="mt-5">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log(values);
+        onSubmit={async (values) => {
+          await addCreator(values);
+          await handleChangeSplit(values);
+          props.handleGoToReview(values);
         }}
       >
         {({ values }) => (
@@ -105,7 +167,7 @@ const RoyaltiesSpiltter = (props: {
                   <input
                     className="inputRow"
                     type={"number"}
-                    placeholder={"100"}
+                    placeholder={"Between 0 and 100"}
                     onChange={onRoyaltyPercentageChange}
                     required
                   />
@@ -140,16 +202,16 @@ const RoyaltiesSpiltter = (props: {
                             type="text"
                             className="inputRow"
                           />
-                          <ErrorMessage
+                          {/* <ErrorMessage
                             name={`royalties.${index}.creatorWalletAddress`}
                             component="div"
                             className="field-error"
-                          />
+                          /> */}
                         </div>
                         <div className="flex">
                           <label
                             htmlFor={`royalties.${index}.splitPercentage`}
-                            className="font-semibold"
+                            className="font-semibold mx-3"
                           >
                             Split Percentage
                           </label>
@@ -158,18 +220,18 @@ const RoyaltiesSpiltter = (props: {
                             type="number"
                             className="inputRow"
                           />
-                          <ErrorMessage
+                          {/* <ErrorMessage
                             name={`royalties.${index}.splitPercentage`}
                             component="div"
                             className="field-error"
-                          />
+                          /> */}
                         </div>
                         <div className="mb-2">
                           <button
                             type="button"
                             onClick={() => {
                               console.log("index => ", index);
-                              remove(index);
+                              if (index !== 0) remove(index);
                             }}
                           >
                             <MinusCircleIcon className="h-8" />
@@ -232,7 +294,7 @@ const RoyaltiesSpiltter = (props: {
           </Form>
         )}
       </Formik>
-      {props.isShowErrors && (
+      {props.isShowErrors && props.totalRoyaltyShares !== 100 && (
         <div className={unSuccessfulClassName.bar} role="alert">
           <div className="flex">
             <div className="py-1">
@@ -251,7 +313,13 @@ const RoyaltiesSpiltter = (props: {
             <div>
               <div className="font-normal">{}</div>
               <div className="text-sm py-1 items-center">
-                The split percentage for this creator cannot be 0%.
+                The split percentages for each creator must add up to 100%.
+                Current total split percentage is {props.totalRoyaltyShares}%.
+              </div>
+              <div className="text-sm py-1 items-center">Or</div>
+              <div className="text-sm py-1 items-center">
+                A share that is 0 or total shares does not equal 100 is
+                presented.
               </div>
             </div>
           </div>

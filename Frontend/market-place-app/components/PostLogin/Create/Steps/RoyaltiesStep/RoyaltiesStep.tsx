@@ -8,33 +8,7 @@ import {
   UserValue,
 } from "../../../../../interfaces";
 import { shortenAddress } from "../../../../../utils/string";
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import RoyaltiesSpiltter from "./RoyaltiesSpiltter";
-import { v4 as uuidv4 } from "uuid";
-
-const validationSchema = () => {
-  return Yup.object().shape({
-    royaltyPercentage: Yup.number()
-      .min(0, "The percentage must be more than 0%")
-      .max(100, "The percentage must be less than 100%")
-      .required("Royalty percentage is required"),
-    royalties: Yup.array().of(
-      Yup.object().shape({
-        creatorWalletAddress: Yup.string().test(
-          "len",
-          "About section must be between 0 and 45 characters.",
-          (val: any) =>
-            val && val.toString().length >= 0 && val.toString().length <= 45
-        ),
-        splitPercentage: Yup.number()
-          .min(0, "The percentage must be more than 0%")
-          .max(100, "The percentage must be less than 100%")
-          .required("Royalty split percentage is required"),
-      })
-    ),
-  });
-};
 
 const RoyaltiesStep = (props: {
   attributes: IMetadataExtension;
@@ -50,22 +24,8 @@ const RoyaltiesStep = (props: {
   const [showCreatorsModal, setShowCreatorsModal] = useState<boolean>(false);
   const [isShowErrors, setIsShowErrors] = useState<boolean>(false);
 
-  // TODO: add royalty split
-  const initialValues: { royaltyPercentage: number } = {
-    royaltyPercentage: 0,
-  };
-
   const handleGoToReview = (formValue) => {
-    console.log(formValue);
-    return;
-    // get royaltyPercentage and royaltySplit
-    const { royaltyPercentage } = formValue;
-
-    // assign new seller_fee_basis_points
-    props.setAttributes({
-      ...props.attributes,
-      seller_fee_basis_points: royaltyPercentage * 100,
-    });
+    console.log("royalties => ", royalties);
 
     // Find all royalties that are invalid (0)
     const zeroedRoyalties = royalties.filter((royalty) => royalty.amount === 0);
@@ -79,16 +39,20 @@ const RoyaltiesStep = (props: {
       return;
     }
 
+    console.log("[...fixedCreators, ...creators]", [
+      ...fixedCreators,
+      ...creators,
+    ]);
     const creatorStructs: Creator[] = [...fixedCreators, ...creators].map(
       (c) =>
         new Creator({
           address: c.value,
           verified: c.value === publicKey?.toBase58(),
-          share:
-            royalties.find((r) => r.creatorKey === c.value)?.amount ||
-            Math.round(100 / royalties.length),
+          share: royalties.find((r) => r.creatorKey === c.value)?.amount,
         })
     );
+
+    console.log("creatorStructs => ", creatorStructs);
 
     const share = creatorStructs.reduce((acc, el) => (acc += el.share), 0);
     if (share > 100 && creatorStructs.length) {
@@ -131,6 +95,8 @@ const RoyaltiesStep = (props: {
       return totalShares + royalty.amount;
     }, 0);
 
+    console.log("-------------- total -------------- ", total);
+
     setTotalRoyaltiesShare(total);
   }, [royalties]);
 
@@ -146,8 +112,8 @@ const RoyaltiesStep = (props: {
 
       <div className="form-group">
         {/* 
-                  RoyaltiesSpiltter 
-                */}
+          Royalties Form
+        */}
         {[...fixedCreators, ...creators].length > 0 && (
           <div>
             <label className="action-field" style={{ width: "100%" }}>
@@ -159,12 +125,16 @@ const RoyaltiesStep = (props: {
                 royalties will be split out amongst the creators.
               </p>
               <RoyaltiesSpiltter
-                creators={[...fixedCreators, ...creators]}
+                fixedCreators={fixedCreators}
+                creators={creators}
+                setCreators={setCreators}
                 royalties={royalties}
                 setRoyalties={setRoyalties}
                 isShowErrors={isShowErrors}
                 attributes={props.attributes}
                 setAttributes={props.setAttributes}
+                handleGoToReview={handleGoToReview}
+                totalRoyaltyShares={totalRoyaltyShares}
               />
             </label>
           </div>
