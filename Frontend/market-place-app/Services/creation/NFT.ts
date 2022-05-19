@@ -6,11 +6,21 @@ import {
   MetadataJsonCreator,
   MetadataJsonProperties,
   MetadataJsonFile,
+  ArweaveUploadResult,
+  ArweaveStorage,
+  ArweaveStorageCtorFields,
 } from "@metaplex/js";
 
 import { PublicKey, Transaction, Connection } from "@solana/web3.js";
 import { IMetadataExtension } from "../../interfaces";
 import BN from "bn.js";
+import dotenv from "dotenv";
+dotenv.config();
+
+console.log(process.env.ARWEAVE_ENDPOINT);
+
+const ENDPOINT: string = process.env.ARWEAVE_ENDPOINT.toString();
+const ENV = process.env.ENV.toString();
 
 const {
   metadata: {
@@ -181,4 +191,13 @@ export const mintNFT = async (
     console.log(" error in mintNFT => ", error);
     return null;
   }
+};
+
+const uploadToArweaveStorage = async (): Promise<ArweaveUploadResult> => {
+  const storageParam: ArweaveStorageCtorFields = {
+    endpoint: ENDPOINT,
+    env: ENV,
+  };
+  new ArweaveStorage(ENDPOINT);
+  return;
 };

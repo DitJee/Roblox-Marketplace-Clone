@@ -93,6 +93,23 @@ const Create = () => {
       }
 
       console.log(" _nft => ", _nft);
+
+      console.log(" _nft.edition.toBase58() => ", _nft.edition.toBase58());
+      console.log(" _nft.metadata.toBase58() => ", _nft.metadata.toBase58());
+      console.log(" _nft.mint.toBase58() => ", _nft.mint.toBase58());
+      console.log(" _nft.txId => ", _nft.txId);
+
+      const tokenPublicKey = _nft.mint.toBase58();
+
+      try {
+        const ownedMetadata = await programs.metadata.Metadata.load(
+          connection,
+          tokenPublicKey
+        );
+        console.log("ownedMetadata => ", ownedMetadata);
+      } catch (err) {
+        console.log("Failed to fetch metadata => ", err);
+      }
     } catch (e: any) {
       setAlertMessage(e.message);
       console.error(e);

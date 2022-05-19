@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/outline";
-import { Button } from "antd";
 const WaitingStep = (props: {
   mint: Function;
   minting: boolean;

@@ -108,7 +108,7 @@ const LaunchStep = (props: {
             </div>
           </div>
         ) : (
-          <div className="flex  content-center ">
+          <div className="text-center mt-5">
             <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-900"></div>
           </div>
         )}
