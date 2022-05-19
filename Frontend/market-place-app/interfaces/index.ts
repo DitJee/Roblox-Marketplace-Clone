@@ -6,7 +6,13 @@
 
 import { Wallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
-import { Connection } from "@metaplex/js";
+import {
+  Connection,
+  MetaDataJsonCategory,
+  MetadataJsonCreator,
+  MetadataJsonFile,
+} from "@metaplex/js";
+
 export type User = {
   id: number;
   name: string;
@@ -101,30 +107,7 @@ export type MetaData = {
   image: string;
 };
 
-export enum MetadataCategory {
-  Audio = "audio",
-  Video = "video",
-  Image = "image",
-  VR = "vr",
-  HTML = "html",
-}
 export type StringPublicKey = string;
-
-export class Creator {
-  address: StringPublicKey;
-  verified: boolean;
-  share: number;
-
-  constructor(args: {
-    address: StringPublicKey;
-    verified: boolean;
-    share: number;
-  }) {
-    this.address = args.address;
-    this.verified = args.verified;
-    this.share = args.share;
-  }
-}
 
 export type Attribute = {
   trait_type?: string;
@@ -132,18 +115,13 @@ export type Attribute = {
   value: string | number;
 };
 
-export type MetadataFile = {
-  uri: string;
-  type: string;
-};
-
-export type FileOrString = MetadataFile | string;
+export type FileOrString = MetadataJsonFile;
 
 export interface IMetadataExtension {
   name: string;
   symbol: string;
 
-  creators: Creator[] | null;
+  creators: MetadataJsonCreator[] | null;
   description: string;
   // preview image absolute URI
   image: string;
@@ -158,12 +136,8 @@ export interface IMetadataExtension {
 
   properties: {
     files?: FileOrString[];
-    category: MetadataCategory;
+    category: MetaDataJsonCategory;
     maxSupply?: number;
-    creators?: {
-      address: string;
-      shares: number;
-    }[];
   };
 }
 
@@ -210,3 +184,19 @@ export type SetWhitelistedCreatorParams = {
 export declare type ParamsWithStore<P> = P & {
   store: PublicKey;
 };
+
+export class Creator {
+  address: StringPublicKey;
+  verified: boolean;
+  share: number;
+
+  constructor(args: {
+    address: StringPublicKey;
+    verified: boolean;
+    share: number;
+  }) {
+    this.address = args.address;
+    this.verified = args.verified;
+    this.share = args.share;
+  }
+}

@@ -1,11 +1,9 @@
+import { MetaDataJsonCategory } from "@metaplex/js";
 import { Row } from "antd";
 import React, { FC } from "react";
-import { MetadataCategory } from "../../../../interfaces";
 import useWindowDimensions from "../../../../utils/layout";
 
-const CategoryStep = (props: {
-  confirm: (category: MetadataCategory) => void;
-}) => {
+const CategoryStep = (props: { confirm: (category) => void }) => {
   const { width } = useWindowDimensions();
 
   const textStyle = () => {
@@ -17,27 +15,27 @@ const CategoryStep = (props: {
       {[
         {
           name: "Image",
-          category: MetadataCategory.Image,
+          category: "image",
           description: "JPG, PNG, GIF",
         },
         {
           name: "Video",
-          category: MetadataCategory.Video,
+          category: "video",
           description: "MP4, MOV",
         },
         {
           name: "Audio",
-          category: MetadataCategory.Audio,
+          category: "audio",
           description: "MP3, WAV, FLAC",
         },
         {
           name: "AR/3D",
-          category: MetadataCategory.VR,
+          category: "vr",
           description: "GLB",
         },
         {
           name: "HTML Asset",
-          category: MetadataCategory.HTML,
+          category: "html",
           description: "HTML",
         },
       ].map((element, index) => {

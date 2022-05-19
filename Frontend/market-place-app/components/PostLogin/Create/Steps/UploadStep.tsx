@@ -1,15 +1,12 @@
 import React, { FC, FormEvent, useEffect, useState } from "react";
-import {
-  IMetadataExtension,
-  MetadataCategory,
-  MetadataFile,
-} from "../../../../interfaces";
+import { IMetadataExtension } from "../../../../interfaces";
 import { UploadIcon } from "@heroicons/react/solid";
 import { getLast } from "../../../../utils/string";
 import * as Yup from "yup";
 import Error from "next/error";
 import { Row, Upload } from "antd";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import { MetaDataJsonCategory, MetadataJsonFile } from "@metaplex/js";
 
 const { Dragger } = Upload;
 
@@ -62,34 +59,34 @@ const UploadStep: FC = (props: {
     });
   }, []);
 
-  const uploadMsg = (category: MetadataCategory) => {
+  const uploadMsg = (category: MetaDataJsonCategory) => {
     switch (category) {
-      case MetadataCategory.Audio:
+      case "audio":
         return "Upload your audio creation (MP3, FLAC, WAV)";
-      case MetadataCategory.Image:
+      case "image":
         return "Upload your image creation (PNG, JPG, GIF)";
-      case MetadataCategory.Video:
+      case "video":
         return "Upload your video creation (MP4, MOV, GLB)";
-      case MetadataCategory.VR:
+      case "vr":
         return "Upload your AR/VR creation (GLB)";
-      case MetadataCategory.HTML:
+      case "html":
         return "Upload your HTML File (HTML)";
       default:
         return "Please go back and choose a category";
     }
   };
 
-  const acceptableFiles = (category: MetadataCategory) => {
+  const acceptableFiles = (category: MetaDataJsonCategory) => {
     switch (category) {
-      case MetadataCategory.Audio:
+      case "audio":
         return ".mp3,.flac,.wav";
-      case MetadataCategory.Image:
+      case "image":
         return ".png,.jpg,.gif";
-      case MetadataCategory.Video:
+      case "video":
         return ".mp4,.mov,.webm";
-      case MetadataCategory.VR:
+      case "vr":
         return ".glb";
-      case MetadataCategory.HTML:
+      case "html":
         return ".html";
       default:
         return "";
@@ -126,13 +123,12 @@ const UploadStep: FC = (props: {
               return {
                 uri,
                 type,
-              } as MetadataFile;
+              } as MetadataJsonFile;
             }),
         },
         image: coverFile?.name || "",
         animation_url:
-          props.attributes.properties?.category !== MetadataCategory.Image &&
-          customURL
+          props.attributes.properties?.category !== "image" && customURL
             ? customURL
             : mainFile && mainFile.name,
       });
@@ -182,7 +178,7 @@ const UploadStep: FC = (props: {
           <p className="ant-upload-text">Drag and drop, or click to browse</p>
         </Dragger>
       </div>
-      {props.attributes.properties?.category !== MetadataCategory.Image && (
+      {props.attributes.properties?.category !== "image" && (
         <Row
           className="mt-5 border rounded-2xl p-6 bg-purple-500"
           style={{ marginBottom: 5, marginTop: 30 }}

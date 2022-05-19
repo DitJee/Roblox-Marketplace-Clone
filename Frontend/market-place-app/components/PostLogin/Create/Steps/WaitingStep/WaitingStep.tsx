@@ -5,12 +5,12 @@ const WaitingStep = (props: {
   minting: boolean;
   confirm: Function;
 }) => {
+  const mintNFT = async () => {
+    await props.mint();
+    //props.confirm();
+  };
   useEffect(() => {
-    const func = async () => {
-      await props.mint();
-      //props.confirm();
-    };
-    func();
+    mintNFT();
   }, []);
 
   return (

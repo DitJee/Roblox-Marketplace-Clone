@@ -1,7 +1,7 @@
+import { MetadataJsonCreator } from "@metaplex/js";
 import { useWallet } from "@solana/wallet-adapter-react";
 import React, { FC, FormEvent, useEffect, useRef, useState } from "react";
 import {
-  Creator,
   IMetadataExtension,
   RoyaltiesInfo,
   Royalty,
@@ -62,18 +62,17 @@ const RoyaltiesStep = (props: {
       ...fixedCreators.current,
       ...creators.current,
     ]);
-    const creatorStructs: Creator[] = [
+    const creatorStructs: MetadataJsonCreator[] = [
       ...fixedCreators.current,
       ...creators.current,
-    ].map(
-      (c) =>
-        new Creator({
-          address: c.value,
-          verified: c.value === publicKey?.toBase58(),
-          share: royalties.current.find((r) => r.creatorKey === c.value)
-            ?.amount,
-        })
-    );
+    ].map((c) => {
+      const _creator = {
+        address: c.value,
+        verified: c.value === publicKey?.toBase58(),
+        share: royalties.current.find((r) => r.creatorKey === c.value)?.amount,
+      };
+      return _creator;
+    });
 
     console.log("creatorStructs => ", creatorStructs);
 

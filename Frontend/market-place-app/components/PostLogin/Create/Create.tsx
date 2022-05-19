@@ -9,13 +9,20 @@ import { string } from "yup";
 import {
   IMetadataExtension,
   MetaData,
-  MetadataCategory,
   StringPublicKey,
 } from "../../../interfaces";
-import { Connection, programs, actions, Wallet } from "@metaplex/js";
-import { PublicKey } from "@solana/web3.js";
-import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
-import { MetaplexOverlay } from "./MetaplexOverlay";
+import {
+  Connection,
+  programs,
+  actions,
+  Wallet,
+  MetadataJson,
+  MetadataJsonCreator,
+  MetadataJsonProperties,
+  MetaDataJsonCategory,
+  MetadataJsonFile,
+} from "@metaplex/js";
+
 import CategoryStep from "./Steps/CategoryStep";
 import StepComponent from "./StepComponent";
 import UploadStep from "./Steps/UploadStep";
@@ -25,6 +32,8 @@ import LaunchStep from "./Steps/LaunchStep/LaunchStep";
 import { MintNFTParams, MintNFTResponse } from "@metaplex/js/lib/actions";
 import useArtworkFiles from "../../../Hooks/Create/useArtworkFiles";
 import WaitingStep from "./Steps/WaitingStep/WaitingStep";
+
+import { mintNFT } from "../../../Services/creation/NFT";
 
 const {
   metadata: { Metadata },
@@ -59,11 +68,9 @@ const Create = () => {
     properties: {
       files: [],
       maxSupply: 0,
-      category: MetadataCategory.Image,
+      category: "image",
     },
   });
-
-  const { image, animation_url } = useArtworkFiles(files, attributes);
 
   // store files
   const mint = async () => {
@@ -71,22 +78,18 @@ const Create = () => {
     setMinting(true);
 
     try {
-      const _wallet: Wallet = {
-        publicKey: publicKey,
-        signTransaction: signTransaction,
-        signAllTransactions: signAllTransactions,
-      };
-      const mintParams: MintNFTParams = {
-        connection: connection,
-        wallet: _wallet,
-        uri: JSON.stringify(attributes),
-        maxSupply: attributes.properties.maxSupply,
-      };
-      const _nft: MintNFTResponse = await actions.mintNFT(mintParams);
+      const _nft: MintNFTResponse = await mintNFT(
+        publicKey,
+        signAllTransactions,
+        signTransaction,
+        connection,
+        attributes
+      );
+      console.log(" _nft #1 => ", _nft);
 
       if (_nft) setNft(_nft);
 
-      console.log(" _nft => ", _nft);
+      console.log(" _nft #2 => ", _nft);
     } catch (e: any) {
       setAlertMessage(e.message);
       console.error(e);
@@ -120,7 +123,7 @@ const Create = () => {
       case 0:
         return (
           <CategoryStep
-            confirm={(category: MetadataCategory) => {
+            confirm={(category: MetaDataJsonCategory) => {
               setAttributes({
                 ...attributes,
                 properties: {
@@ -192,7 +195,7 @@ const Create = () => {
       default:
         return (
           <CategoryStep
-            confirm={(category: MetadataCategory) => {
+            confirm={(category: MetaDataJsonCategory) => {
               setAttributes({
                 ...attributes,
                 properties: {

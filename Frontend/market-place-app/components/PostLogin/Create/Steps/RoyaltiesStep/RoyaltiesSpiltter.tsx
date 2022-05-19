@@ -1,7 +1,6 @@
 import { useWallet } from "@solana/wallet-adapter-react";
 import React, { FC, FormEvent, useEffect, useState } from "react";
 import {
-  Creator,
   IMetadataExtension,
   RoyaltiesInfo,
   Royalty,
