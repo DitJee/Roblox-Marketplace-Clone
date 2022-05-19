@@ -72,6 +72,8 @@ const Create = () => {
     },
   });
 
+  const [showWaitingStep, setShowWaitingStep] = useState<boolean>(false);
+
   // store files
   const mint = async () => {
     setStepsVisible(false);
@@ -85,11 +87,12 @@ const Create = () => {
         connection,
         attributes
       );
-      console.log(" _nft #1 => ", _nft);
 
-      if (_nft) setNft(_nft);
+      if (_nft) {
+        setNft(_nft);
+      }
 
-      console.log(" _nft #2 => ", _nft);
+      console.log(" _nft => ", _nft);
     } catch (e: any) {
       setAlertMessage(e.message);
       console.error(e);
@@ -176,18 +179,8 @@ const Create = () => {
           <LaunchStep
             attributes={attributes}
             files={files}
-            confirm={() => gotoStep(5)}
+            confirm={() => setShowWaitingStep(true)}
             connection={connection}
-          />
-        );
-        break;
-
-      case 5:
-        return (
-          <WaitingStep
-            mint={mint}
-            minting={isMinting}
-            confirm={() => gotoStep(6)}
           />
         );
         break;
@@ -215,6 +208,14 @@ const Create = () => {
     <div className=" grid grid-col-2 items-center  p-10 bg-gray-100">
       <StepComponent step={step} />
       {stepComponent(parseInt(step_param))}
+      {showWaitingStep && (
+        <WaitingStep
+          mint={mint}
+          minting={isMinting}
+          setShowWaitingStep={setShowWaitingStep}
+          confirm={() => gotoStep(0)}
+        />
+      )}
     </div>
   );
 };

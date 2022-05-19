@@ -42,6 +42,7 @@
     "oyster-common": "0.0.2",
     "react": "18.1.0",
     "react-content-loader": "^6.2.0",
+    "react-countdown": "^2.3.2",
     "react-dom": "18.1.0",
     "react-grid-carousel": "^1.0.1",
     "react-on-screen": "^2.1.1",
